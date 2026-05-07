@@ -340,6 +340,87 @@ body {
   letter-spacing: 1px;
 }
 
+/* ── SET TIMER ── */
+.set-timer-wrap { margin-bottom: 14px; display: none; }
+.set-timer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.set-timer-title {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px;
+  color: var(--accent); text-transform: uppercase;
+}
+.set-timer-dur-badge {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px;
+  color: var(--accent); background: rgba(200,241,53,.1);
+  border: 1px solid rgba(200,241,53,.25); padding: 2px 9px; border-radius: 3px;
+}
+.set-counter {
+  text-align: center; margin-bottom: 9px;
+}
+.set-counter-label {
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
+  letter-spacing: 1px; margin-bottom: 6px;
+}
+.set-counter-dots { display: flex; gap: 6px; justify-content: center; }
+.set-counter-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--border); border: 1px solid var(--border);
+  transition: background 0.25s, transform 0.2s;
+}
+.set-counter-dot.done { background: var(--accent); border-color: var(--accent); }
+.set-counter-dot.current {
+  background: transparent; border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(200,241,53,.25);
+  transform: scale(1.2);
+}
+.set-timer-btn {
+  width: 100%;
+  padding: 13px;
+  min-height: 48px;
+  border-radius: 8px;
+  border: 1px solid rgba(200,241,53,.3);
+  background: rgba(200,241,53,.07);
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 16px; letter-spacing: 0;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+  margin-bottom: 8px;
+}
+.set-timer-btn:active { transform: scale(0.98); opacity: 0.8; }
+.set-timer-btn.running {
+  border-color: var(--accent3);
+  background: rgba(255,107,107,.08);
+  color: var(--accent3);
+}
+.set-timer-btn.done-flash {
+  border-color: var(--accent2);
+  background: rgba(94,255,160,.12);
+  color: var(--accent2);
+}
+.set-timer-btn.all-done {
+  opacity: 0.5; pointer-events: none;
+}
+.set-timer-display {
+  display: none;
+  align-items: center; justify-content: center;
+  gap: 14px; margin-bottom: 8px;
+}
+.set-timer-display.visible { display: flex; }
+.set-ring-fill {
+  stroke: var(--accent); stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+.set-ring-fill.urgent { stroke: var(--accent3); }
+.set-timer-divider {
+  height: 1px; background: var(--border);
+  margin: 14px 0; opacity: 0.5;
+}
+
 /* ── REST TIMER ── */
 .rest-timer-wrap { margin-top: 12px; }
 .rest-timer-btn {
@@ -1960,6 +2041,32 @@ function renderSlot(containerEl, progKey, slotIndex) {
             Harder →
           </button>
         </div>
+        <!-- SET TIMER (only visible for timed holds) -->
+        <div class="set-timer-wrap" id="set-timer-wrap-${progKey}">
+          <div class="set-timer-header">
+            <div class="set-timer-title">Set Timer</div>
+            <div class="set-timer-dur-badge" id="set-timer-dur-${progKey}">— SEC</div>
+          </div>
+          <div class="set-counter" id="set-counter-${progKey}">
+            <div class="set-counter-label" id="set-counter-label-${progKey}">Set 1 of 3</div>
+            <div class="set-counter-dots" id="set-counter-dots-${progKey}"></div>
+          </div>
+          <button class="set-timer-btn" id="set-btn-${progKey}" onclick="startSetTimer('${progKey}')">▶ Start Set</button>
+          <div class="set-timer-display" id="set-display-${progKey}">
+            <div class="rest-timer-ring">
+              <svg viewBox="0 0 64 64" width="64" height="64">
+                <circle class="ring-bg" cx="32" cy="32" r="28"/>
+                <circle class="set-ring-fill" id="set-ring-${progKey}" cx="32" cy="32" r="28" stroke-dasharray="175.9" stroke-dashoffset="0"/>
+              </svg>
+              <div class="rest-timer-num" id="set-num-${progKey}">—</div>
+            </div>
+            <div class="rest-timer-info">
+              <div class="rest-timer-label" id="set-label-${progKey}">Work!</div>
+              <button class="rest-timer-skip" onclick="skipSetTimer('${progKey}')">Cancel ×</button>
+            </div>
+          </div>
+          <div class="set-timer-divider"></div>
+        </div>
         <div class="rest-timer-wrap">
           <button class="rest-timer-btn" id="timer-btn-${progKey}" onclick="startRestTimer('${progKey}')">⏱ Start Rest Timer</button>
           <div class="rest-timer-display" id="timer-display-${progKey}">
@@ -1983,6 +2090,11 @@ function renderSlot(containerEl, progKey, slotIndex) {
 
   containerEl.innerHTML = html;
 
+  // Init set counter state for this key if not already tracked
+  if (setCounters[progKey] === undefined) setCounters[progKey] = 0;
+  // Show/hide set timer and populate dots
+  updateSetTimerVisibility(progKey);
+
   // Attach swipe listener
   attachSwipe(progKey);
 }
@@ -2002,6 +2114,10 @@ function changeLevel(key, delta, e) {
   let lvl = getLevel(key);
   const newLvl = Math.max(0, Math.min(levels.length-1, lvl+delta));
   if (newLvl === lvl) return;
+
+  // Stop any running timers for this exercise
+  skipSetTimer(key);
+  skipRestTimer(key);
 
   const body = document.getElementById('body-'+key);
   const animClass = delta > 0 ? 'anim-out-left' : 'anim-out-right';
@@ -2044,6 +2160,10 @@ function updateCardContent(key, lvl) {
   const dots = block.querySelectorAll('.prog-dot');
   dots.forEach((d,i)=>d.classList.toggle('active',i===lvl));
   block.querySelector('.prog-level-counter span').textContent = `${lvl+1}/${total}`;
+
+  // Reset set counter and refresh set timer visibility for new level
+  setCounters[key] = 0;
+  updateSetTimerVisibility(key);
 
   // refresh progress summary if open
   const ps = document.getElementById('progressSummary');
@@ -2229,6 +2349,162 @@ function toggleProgressSummary() {
 }
 
 
+
+// ══════════════════════════════════════════════════════════
+// SET TIMER
+// ══════════════════════════════════════════════════════════
+const activeSetTimers = {};
+const setCounters = {}; // key → number of sets completed this session
+
+function getSetSeconds(key) {
+  const lvl = getLevel(key);
+  const ex = PROGRESSIONS[key] && PROGRESSIONS[key][lvl];
+  if (!ex) return null;
+  // Only match time in the rep slot: "× 20–30 sec" or "× 15 sec"
+  // Excludes rest time like "60s rest" (uses 's' not 'sec' or appears after '·')
+  const rangeMatch = ex.sets.match(/[×x]\s*(\d+)[–\-](\d+)\s*sec/);
+  if (rangeMatch) return parseInt(rangeMatch[2]); // use upper bound as goal
+  const singleMatch = ex.sets.match(/[×x]\s*(\d+)\s*sec\b/i);
+  if (singleMatch) return parseInt(singleMatch[1]);
+  return null;
+}
+
+function getSetCount(key) {
+  const lvl = getLevel(key);
+  const ex = PROGRESSIONS[key] && PROGRESSIONS[key][lvl];
+  if (!ex) return 3;
+  const match = ex.sets.match(/^(\d+)\s*[×x]/);
+  return match ? parseInt(match[1]) : 3;
+}
+
+function updateSetTimerVisibility(key) {
+  const wrap = document.getElementById('set-timer-wrap-' + key);
+  if (!wrap) return;
+  const secs = getSetSeconds(key);
+  wrap.style.display = secs ? 'block' : 'none';
+  if (!secs) return;
+
+  const durEl = document.getElementById('set-timer-dur-' + key);
+  if (durEl) durEl.textContent = secs + ' SEC';
+
+  const total = getSetCount(key);
+  const current = setCounters[key] || 0;
+
+  // Update dots
+  const dotsEl = document.getElementById('set-counter-dots-' + key);
+  if (dotsEl) {
+    let html = '';
+    for (let i = 0; i < total; i++) {
+      let cls = 'set-counter-dot';
+      if (i < current) cls += ' done';
+      else if (i === current) cls += ' current';
+      html += `<div class="${cls}"></div>`;
+    }
+    dotsEl.innerHTML = html;
+  }
+
+  // Update label
+  const labelEl = document.getElementById('set-counter-label-' + key);
+  if (labelEl) {
+    if (current >= total) {
+      labelEl.textContent = '✓ All sets complete';
+      labelEl.style.color = 'var(--accent2)';
+    } else {
+      labelEl.textContent = `Set ${current + 1} of ${total}`;
+      labelEl.style.color = '';
+    }
+  }
+
+  // Update button state
+  const btn = document.getElementById('set-btn-' + key);
+  if (btn && !activeSetTimers[key]) {
+    if (current >= total) {
+      btn.textContent = '✓ All Sets Done';
+      btn.classList.add('all-done');
+    } else {
+      btn.classList.remove('all-done');
+      btn.textContent = current === 0 ? '▶ Start Set' : '▶ Start Next Set';
+    }
+  }
+}
+
+function startSetTimer(key) {
+  if (activeSetTimers[key]) {
+    skipSetTimer(key);
+    return;
+  }
+  const secs = getSetSeconds(key);
+  if (!secs) return;
+
+  const total = getSetCount(key);
+  // Reset if all sets were already done (let them repeat)
+  if ((setCounters[key] || 0) >= total) setCounters[key] = 0;
+
+  const btn     = document.getElementById('set-btn-' + key);
+  const display = document.getElementById('set-display-' + key);
+  const numEl   = document.getElementById('set-num-' + key);
+  const ringEl  = document.getElementById('set-ring-' + key);
+  const labelEl = document.getElementById('set-label-' + key);
+  const circumference = 175.9;
+
+  display.classList.add('visible');
+  btn.classList.add('running');
+  btn.classList.remove('all-done');
+  btn.textContent = '⏹ Cancel';
+
+  let remaining = secs;
+
+  function tick() {
+    numEl.textContent = remaining;
+    const progress = remaining / secs;
+    ringEl.style.strokeDashoffset = circumference * (1 - progress);
+    ringEl.classList.toggle('urgent', remaining <= 5);
+    labelEl.textContent = remaining <= 5 ? 'Almost!' : 'Work!';
+
+    if (remaining <= 0) {
+      clearInterval(activeSetTimers[key]);
+      delete activeSetTimers[key];
+
+      // Increment set counter
+      setCounters[key] = Math.min((setCounters[key] || 0) + 1, total);
+
+      btn.classList.remove('running');
+      btn.classList.add('done-flash');
+      numEl.textContent = '✓';
+      labelEl.textContent = 'Done!';
+
+      setTimeout(() => {
+        btn.classList.remove('done-flash');
+        display.classList.remove('visible');
+        ringEl.style.strokeDashoffset = 0;
+        updateSetTimerVisibility(key);
+        // Auto-launch rest timer
+        startRestTimer(key);
+      }, 1200);
+      return;
+    }
+    remaining--;
+  }
+
+  tick();
+  activeSetTimers[key] = setInterval(tick, 1000);
+}
+
+function skipSetTimer(key) {
+  if (activeSetTimers[key]) {
+    clearInterval(activeSetTimers[key]);
+    delete activeSetTimers[key];
+  }
+  const btn     = document.getElementById('set-btn-' + key);
+  const display = document.getElementById('set-display-' + key);
+  const ringEl  = document.getElementById('set-ring-' + key);
+  if (display) display.classList.remove('visible');
+  if (ringEl) ringEl.style.strokeDashoffset = 0;
+  if (btn) {
+    btn.classList.remove('running', 'done-flash', 'all-done');
+  }
+  updateSetTimerVisibility(key);
+}
 
 // ══════════════════════════════════════════════════════════
 // REST TIMER
