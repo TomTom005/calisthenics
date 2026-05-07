@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Calisthenics Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c26;
+  --border: #2a2a38;
+  --accent: #c8f135;
+  --accent2: #5effa0;
+  --accent3: #ff6b6b;
+  --text: #e8e8f0;
+  --muted: #6a6a80;
+  --card: #16161f;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 52px 24px 40px;
+  text-align: center;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, #1a2a0a 0%, transparent 70%);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, #1e1e2a 39px, #1e1e2a 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, #1e1e2a 39px, #1e1e2a 40px);
+  opacity: 0.25;
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 14px; border-radius: 2px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  position: relative;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(54px, 13vw, 108px);
+  letter-spacing: 4px; line-height: 0.9;
+  position: relative;
+}
+.hero h1 span { color: var(--accent); display: block; }
+.hero-sub {
+  font-size: 13px; color: var(--muted);
+  margin: 18px auto 0; max-width: 300px;
+  position: relative;
+}
+.hero-stats {
+  display: flex; justify-content: center;
+  gap: 28px; margin-top: 28px; flex-wrap: wrap;
+  position: relative;
+}
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--accent); line-height: 1; }
+.stat-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+/* ── PHILOSOPHY ── */
+.philosophy {
+  margin: 0 14px 28px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px; padding: 18px;
+}
+.philosophy h3 { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+.philosophy p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 3px; color: var(--muted);
+  text-transform: uppercase;
+  padding: 0 14px; margin-bottom: 10px;
+}
+
+/* ── DAY TABS ── */
+.week-nav {
+  display: flex; gap: 7px;
+  padding: 0 14px; overflow-x: auto;
+  scrollbar-width: none; margin-bottom: 22px;
+}
+.week-nav::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 14px;
+  cursor: pointer; transition: all 0.18s;
+  text-align: center; user-select: none;
+}
+.day-tab.active, .day-tab:active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0a0a0f;
+}
+.day-tab.today-tab { border-color: rgba(94,255,160,.4); }
+.day-tab.today-tab .day-tab-label::after { content: ' ·'; color: var(--accent2); }
+.day-tab.rest-tab.active { background: var(--surface2); border-color: var(--accent2); color: var(--accent2); }
+
+.day-tab-name { font-family: 'Bebas Neue', sans-serif; font-size: 19px; line-height: 1; }
+.day-tab-label { font-size: 8px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-top: 2px; opacity: 0.65; }
+
+/* ── DAY CONTENT ── */
+.day-content { display: none; padding: 0 14px; }
+.day-content.active { display: block; }
+.day-header { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.day-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; }
+.day-title span { color: var(--accent); }
+.day-meta { display: flex; gap: 10px; margin-top: 7px; flex-wrap: wrap; }
+.meta-pill {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px;
+  color: var(--accent);
+  background: rgba(200,241,53,.08);
+  border: 1px solid rgba(200,241,53,.2);
+  padding: 3px 9px; border-radius: 3px;
+}
+.meta-pill.green { color: var(--accent2); background: rgba(94,255,160,.08); border-color: rgba(94,255,160,.2); }
+
+/* ══════════════════════════════════════════
+   PROGRESSION CAROUSEL
+══════════════════════════════════════════ */
+.prog-block {
+  margin-bottom: 20px;
+}
+
+/* Header row: exercise slot title + level counter */
+.prog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.prog-slot-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px; color: var(--muted);
+  letter-spacing: 2px;
+}
+.prog-level-counter {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+}
+.prog-dots {
+  display: flex; gap: 4px;
+}
+.prog-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s, transform 0.2s;
+}
+.prog-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+/* The card itself */
+.prog-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.2s;
+  touch-action: pan-y;
+  user-select: none;
+}
+.prog-card.expanded { border-color: rgba(200,241,53,.35); }
+
+/* Level badge ribbon */
+.level-ribbon {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  padding: 3px 9px; border-radius: 3px;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 2;
+}
+.level-ribbon.lv1 { background: rgba(94,255,160,.15); color: var(--accent2); border: 1px solid rgba(94,255,160,.3); }
+.level-ribbon.lv2 { background: rgba(200,241,53,.13); color: var(--accent); border: 1px solid rgba(200,241,53,.3); }
+.level-ribbon.lv3 { background: rgba(255,200,50,.13); color: #ffc832; border: 1px solid rgba(255,200,50,.3); }
+.level-ribbon.lv4 { background: rgba(255,140,50,.13); color: #ff8c32; border: 1px solid rgba(255,140,50,.3); }
+.level-ribbon.lv5 { background: rgba(255,80,80,.15); color: var(--accent3); border: 1px solid rgba(255,80,80,.3); }
+.level-ribbon.lv6 { background: rgba(220,50,255,.15); color: #dc32ff; border: 1px solid rgba(220,50,255,.3); }
+.level-ribbon.lv7 { background: rgba(50,170,255,.15); color: #32aaff; border: 1px solid rgba(50,170,255,.3); }
+
+/* Collapsed header */
+.prog-face {
+  display: flex; align-items: center;
+  gap: 14px; padding: 16px;
+  cursor: pointer;
+}
+.prog-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px; color: var(--accent); line-height: 1;
+  min-width: 32px;
+}
+.prog-info { flex: 1; padding-right: 60px; }
+.prog-name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.prog-sets { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent2); margin-top: 3px; }
+.prog-toggle {
+  width: 26px; height: 26px;
+  background: var(--surface2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--muted);
+  transition: all 0.2s; flex-shrink: 0;
+  position: absolute; right: 16px; bottom: 16px;
+}
+.prog-card.expanded .prog-toggle { background: var(--accent); color: #0a0a0f; transform: rotate(45deg); }
+
+/* Expanded body */
+.prog-body {
+  display: none;
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+}
+.prog-card.expanded .prog-body { display: block; }
+
+/* SVG illustration */
+.ex-svg {
+  width: 100%; height: 130px;
+  border-radius: 8px;
+  margin: 14px 0 12px;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+}
+.ex-svg svg { width: 110px; height: 110px; }
+
+.ex-desc { font-size: 13px; color: var(--muted); line-height: 1.75; margin-bottom: 12px; }
+
+.ex-cues {
+  background: var(--surface2);
+  border-radius: 8px; padding: 11px 13px; margin-bottom: 12px;
+}
+.cue-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 7px; }
+.cue { font-size: 12px; color: var(--text); padding: 3px 0 3px 14px; position: relative; }
+.cue::before { content: '›'; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+
+/* Swipe nav controls */
+.swipe-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  gap: 8px;
+}
+.swipe-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.18s;
+  touch-action: manipulation;
+}
+.swipe-btn:active { opacity: 0.7; transform: scale(0.97); }
+.swipe-btn.harder {
+  color: var(--accent);
+  border-color: rgba(200,241,53,.3);
+  background: rgba(200,241,53,.06);
+}
+.swipe-btn.easier {
+  color: var(--accent2);
+  border-color: rgba(94,255,160,.25);
+  background: rgba(94,255,160,.05);
+}
+.swipe-btn:disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+.swipe-hint {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; color: var(--muted);
+  text-align: center; margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+/* ── REST TIMER ── */
+.rest-timer-wrap { margin-top: 12px; }
+.rest-timer-btn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(94,255,160,.25);
+  background: rgba(94,255,160,.06);
+  color: var(--accent2);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.rest-timer-btn:active { transform: scale(0.98); opacity: 0.8; }
+.rest-timer-btn.running {
+  border-color: var(--accent3);
+  background: rgba(255,107,107,.08);
+  color: var(--accent3);
+}
+.rest-timer-btn.done-flash {
+  border-color: var(--accent);
+  background: rgba(200,241,53,.15);
+  color: var(--accent);
+}
+.rest-timer-display {
+  display: none;
+  align-items: center; justify-content: center;
+  gap: 14px; margin-top: 10px;
+}
+.rest-timer-display.visible { display: flex; }
+.rest-timer-ring {
+  position: relative; width: 64px; height: 64px; flex-shrink: 0;
+}
+.rest-timer-ring svg { transform: rotate(-90deg); }
+.rest-timer-ring circle { fill: none; stroke-width: 3; }
+.ring-bg { stroke: var(--border); }
+.ring-fill { stroke: var(--accent2); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+.ring-fill.urgent { stroke: var(--accent3); }
+.rest-timer-num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text);
+}
+.rest-timer-info { flex: 1; }
+.rest-timer-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.rest-timer-skip {
+  font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted);
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  padding: 4px 10px; cursor: pointer; margin-top: 6px;
+  transition: all 0.15s;
+}
+.rest-timer-skip:active { opacity: 0.6; }
+
+/* ── MOBILITY CHECKBOXES ── */
+.mobility-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.mobility-item.checked { opacity: 0.45; }
+.mob-check {
+  flex-shrink: 0;
+  width: 18px; height: 18px; margin-top: 1px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+.mobility-item.checked .mob-check {
+  background: rgba(94,255,160,.15);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+.mob-text { flex: 1; }
+.mob-progress-wrap {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.mob-progress-bar {
+  flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.mob-progress-fill {
+  height: 100%; background: var(--accent2); border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.mob-progress-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; white-space: nowrap;
+}
+
+/* ── RESET PROGRESS ── */
+.reset-btn {
+  margin-top: 10px; width: 100%; padding: 10px;
+  background: none; border: 1px solid rgba(255,107,107,.2);
+  border-radius: 8px; color: rgba(255,107,107,.6);
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer; transition: all 0.18s;
+}
+.reset-btn:active { background: rgba(255,107,107,.08); color: var(--accent3); border-color: var(--accent3); }
+
+/* Swipe animation */
+@keyframes slideLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-28px); opacity: 0; }
+}
+@keyframes slideRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(28px); opacity: 0; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(28px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-28px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+.anim-out-left  { animation: slideLeft 0.16s ease forwards; }
+.anim-out-right { animation: slideRight 0.16s ease forwards; }
+.anim-in-right  { animation: slideInRight 0.18s ease forwards; }
+.anim-in-left   { animation: slideInLeft 0.18s ease forwards; }
+
+/* ── REST / MOBILITY DAY ── */
+.rest-day {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: 12px; padding: 26px 18px;
+  text-align: center; margin-bottom: 14px;
+}
+.rest-icon { font-size: 44px; margin-bottom: 10px; }
+.rest-day h3 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--accent2); margin-bottom: 7px; }
+.rest-day p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 280px; margin: 0 auto; }
+.mobility-list { margin-top: 14px; text-align: left; background: var(--surface2); border-radius: 8px; padding: 13px; }
+.mobility-item { font-size: 13px; color: var(--text); padding: 5px 0 5px 17px; position: relative; }
+.mobility-item::before { content: '✦'; position: absolute; left: 0; font-size: 7px; color: var(--accent2); top: 8px; }
+
+/* ── TIPS ── */
+.tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 22px 14px 28px; }
+.tip-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 13px; }
+.tip-icon { font-size: 20px; margin-bottom: 7px; }
+.tip-title { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.tip-body { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+.divider { height: 1px; background: linear-gradient(90deg,transparent,var(--border),transparent); margin: 22px 14px; }
+
+footer { padding: 28px 14px; text-align: center; border-top: 1px solid var(--border); margin-top: 14px; }
+footer p { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+/* ── STREAK BANNER ── */
+.streak-banner {
+  margin: 0 14px 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.streak-left { display: flex; align-items: center; gap: 10px; }
+.streak-fire { font-size: 28px; line-height: 1; }
+.streak-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--accent); line-height: 1; }
+.streak-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+.streak-dots { display: flex; gap: 5px; align-items: center; }
+.streak-day-dot {
+  width: 32px; height: 32px;
+  border-radius: 7px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0;
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.2s;
+  position: relative;
+}
+.streak-day-dot.done { background: rgba(200,241,53,.12); border-color: rgba(200,241,53,.4); color: var(--accent); }
+.streak-day-dot.today { border-color: var(--accent2); box-shadow: 0 0 0 1px rgba(94,255,160,.25); }
+.streak-day-dot.today::after {
+  content: '';
+  position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--accent2);
+}
+.streak-day-dot .dot-check { font-size: 10px; line-height: 1; }
+.streak-day-dot .dot-label { font-size: 7px; color: inherit; opacity: 0.7; }
+
+/* ── PROGRESS SUMMARY ── */
+.progress-summary {
+  margin: 0 14px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.progress-summary-header {
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+.progress-summary-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--accent); text-transform: uppercase;
+}
+.progress-summary-toggle {
+  font-size: 11px; color: var(--muted);
+  transition: transform 0.2s;
+}
+.progress-summary.open .progress-summary-toggle { transform: rotate(180deg); }
+.progress-summary-body { display: none; padding: 0 16px 14px; }
+.progress-summary.open .progress-summary-body { display: block; }
+.progress-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.progress-item {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 10px 11px;
+  border: 1px solid var(--border);
+}
+.progress-item-name { font-size: 10px; font-weight: 600; color: var(--text); margin-bottom: 5px; line-height: 1.2; }
+.progress-bar-wrap {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+.progress-item-level {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px; color: var(--muted); letter-spacing: 1px;
+}
+
+/* ── COMPLETION BUTTON ── */
+.complete-btn-wrap { margin: 18px 0 4px; }
+.complete-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(200,241,53,.3);
+  background: rgba(200,241,53,.07);
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.complete-btn:active { transform: scale(0.98); opacity: 0.8; }
+.complete-btn.done {
+  background: rgba(200,241,53,.18);
+  border-color: var(--accent);
+  color: #0a0a0f;
+  background: var(--accent);
+}
+.complete-btn.done { color: #0a0a0f; }
+
+/* ── WARM-UP SECTION ── */
+.warmup-block {
+  margin-bottom: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.warmup-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 14px;
+  cursor: pointer; user-select: none;
+}
+.warmup-header-left { display: flex; align-items: center; gap: 10px; }
+.warmup-icon { font-size: 20px; }
+.warmup-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--accent2); letter-spacing: 1px; }
+.warmup-meta { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; }
+.warmup-toggle { font-size: 11px; color: var(--muted); transition: transform 0.2s; }
+.warmup-block.open .warmup-toggle { transform: rotate(180deg); }
+.warmup-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
+.warmup-block.open .warmup-body { display: block; }
+.warmup-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(42,42,56,.6);
+}
+.warmup-item:last-child { border-bottom: none; }
+.warmup-item-num { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--accent2); min-width: 18px; opacity: 0.5; }
+.warmup-item-info { flex: 1; }
+.warmup-item-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.warmup-item-detail { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); margin-top: 1px; letter-spacing: 1px; }
+
+/* Progress path */
+.progress-path { display: flex; overflow-x: auto; gap: 0; padding: 0 14px 14px; scrollbar-width: none; }
+.progress-path::-webkit-scrollbar { display: none; }
+.phase-pill {
+  flex-shrink: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 11px 14px; min-width: 110px; position: relative;
+}
+.phase-pill::after { content: '→'; position: absolute; right: -13px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 13px; z-index: 1; }
+.phase-pill:last-child::after { display: none; }
+.phase-pill + .phase-pill { margin-left: 7px; }
+.phase-num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--accent); line-height: 1; }
+.phase-name { font-size: 10px; font-weight: 600; color: var(--text); margin-top: 2px; }
+.phase-weeks { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-badge">Floor Only · No Equipment</div>
+  <h1>CALIS<span>THENICS</span></h1>
+  <p class="hero-sub">A progressive daily plan to build mastery from the ground up. Swipe each exercise to your current level.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Days/Week</div></div>
+    <div class="stat"><div class="stat-num">20–35</div><div class="stat-label">Min/Day</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Levels Each</div></div>
+  </div>
+</div>
+
+<!-- ══ PHILOSOPHY ══ -->
+<div class="philosophy">
+  <h3>The Philosophy</h3>
+  <p>Every exercise in this plan has <strong style="color:var(--text)">up to 7 difficulty levels</strong> — from absolute beginner to elite. Use the arrows inside each exercise to move up when it feels easy, or back down if needed. Your progress is saved automatically. Never train to failure. Leave every session feeling capable.</p>
+</div>
+
+<!-- ══ JOURNEY ══ -->
+<div class="section-label">Your Journey</div>
+<div class="progress-path">
+  <div class="phase-pill"><div class="phase-num">01</div><div class="phase-name">Foundation</div><div class="phase-weeks">Weeks 1–4</div></div>
+  <div class="phase-pill"><div class="phase-num">02</div><div class="phase-name">Strength</div><div class="phase-weeks">Weeks 5–12</div></div>
+  <div class="phase-pill"><div class="phase-num">03</div><div class="phase-name">Skill</div><div class="phase-weeks">Weeks 13–24</div></div>
+  <div class="phase-pill"><div class="phase-num">04</div><div class="phase-name">Mastery</div><div class="phase-weeks">Week 25+</div></div>
+</div>
+
+<!-- ══ STREAK & WEEKLY TRACKER ══ -->
+<div class="streak-banner" id="streakBanner">
+  <div class="streak-left">
+    <div class="streak-fire">🔥</div>
+    <div>
+      <div class="streak-num" id="streakNum">0</div>
+      <div class="streak-label">Day Streak</div>
+    </div>
+  </div>
+  <div>
+    <div class="streak-dots" id="streakDots"></div>
+    <div style="display:flex;gap:5px;margin-top:4px;justify-content:flex-end">
+      <div style="width:32px;text-align:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);letter-spacing:0">M</div>
+      <div style="width:32px;text-align:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);letter-spacing:0">T</div>
+      <div style="width:32px;text-align:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);letter-spacing:0">W</div>
+      <div style="width:32px;text-align:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);letter-spacing:0">T</div>
+      <div style="width:32px;text-align:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);letter-spacing:0">F</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROGRESS SUMMARY ══ -->
+<div class="section-label">Your Levels</div>
+<div class="progress-summary" id="progressSummary">
+  <div class="progress-summary-header" onclick="toggleProgressSummary()">
+    <div class="progress-summary-title">All Exercises — Tap to Expand</div>
+    <div class="progress-summary-toggle">▼</div>
+  </div>
+  <div class="progress-summary-body">
+    <div class="progress-grid" id="progressGrid"></div>
+    <button class="reset-btn" onclick="resetAllProgress()">⚠ Reset All Progress</button>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+
+<div class="section-label">Weekly Schedule</div>
+<div class="week-nav">
+  <div class="day-tab" onclick="showDay('mon',this)"><div class="day-tab-name">MON</div><div class="day-tab-label">Push</div></div>
+  <div class="day-tab" onclick="showDay('tue',this)"><div class="day-tab-name">TUE</div><div class="day-tab-label">Legs</div></div>
+  <div class="day-tab" onclick="showDay('wed',this)"><div class="day-tab-name">WED</div><div class="day-tab-label">Core</div></div>
+  <div class="day-tab" onclick="showDay('thu',this)"><div class="day-tab-name">THU</div><div class="day-tab-label">Pull</div></div>
+  <div class="day-tab" onclick="showDay('fri',this)"><div class="day-tab-name">FRI</div><div class="day-tab-label">Full</div></div>
+  <div class="day-tab rest-tab" onclick="showDay('sat',this)"><div class="day-tab-name">SAT</div><div class="day-tab-label">Mobility</div></div>
+  <div class="day-tab rest-tab" onclick="showDay('sun',this)"><div class="day-tab-name">SUN</div><div class="day-tab-label">Rest</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MONDAY — PUSH
+════════════════════════════════════════ -->
+<div class="day-content" id="day-mon">
+  <div class="day-header">
+    <div class="day-title">MONDAY <span>PUSH</span></div>
+    <div class="day-meta">
+      <span class="meta-pill">Upper Body</span>
+      <span class="meta-pill">~25 min</span>
+      <span class="meta-pill green">3 exercises</span>
+    </div>
+  </div>
+  <div class="warmup-block" id="warmup-mon">
+    <div class="warmup-header" onclick="toggleWarmup('mon')">
+      <div class="warmup-header-left">
+        <div class="warmup-icon">🌡️</div>
+        <div><div class="warmup-title">WARM-UP</div><div class="warmup-meta">5 MIN · TAP TO EXPAND</div></div>
+      </div>
+      <div class="warmup-toggle">▼</div>
+    </div>
+    <div class="warmup-body">
+      <div class="warmup-item"><div class="warmup-item-num">1</div><div class="warmup-item-info"><div class="warmup-item-name">Arm Circles</div><div class="warmup-item-detail">30 sec forward · 30 sec backward</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">2</div><div class="warmup-item-info"><div class="warmup-item-name">Shoulder Rolls</div><div class="warmup-item-detail">10 reps forward · 10 reps backward</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">3</div><div class="warmup-item-info"><div class="warmup-item-name">Wrist Circles & Stretches</div><div class="warmup-item-detail">30 sec each direction</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">4</div><div class="warmup-item-info"><div class="warmup-item-name">Chest Opener (clasp hands behind back)</div><div class="warmup-item-detail">Hold 20 sec × 2</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">5</div><div class="warmup-item-info"><div class="warmup-item-name">5 × Slow Knee Push-Ups</div><div class="warmup-item-detail">Full range, 3 sec down · warm up joints</div></div></div>
+    </div>
+  </div>
+  <!-- Exercise slots filled by JS -->
+  <div id="mon-slot-0"></div>
+  <div id="mon-slot-1"></div>
+  <div id="mon-slot-2"></div>
+  <div class="complete-btn-wrap">
+    <button class="complete-btn" id="complete-mon" onclick="markDone('mon')">
+      <span id="complete-mon-icon">✓</span> Mark Workout Complete
+    </button>
+  </div>
+</div>
+
+<!-- TUESDAY — LEGS -->
+<div class="day-content" id="day-tue">
+  <div class="day-header">
+    <div class="day-title">TUESDAY <span>LEGS</span></div>
+    <div class="day-meta">
+      <span class="meta-pill">Lower Body</span>
+      <span class="meta-pill">~25 min</span>
+      <span class="meta-pill green">3 exercises</span>
+    </div>
+  </div>
+  <div class="warmup-block" id="warmup-tue">
+    <div class="warmup-header" onclick="toggleWarmup('tue')">
+      <div class="warmup-header-left">
+        <div class="warmup-icon">🌡️</div>
+        <div><div class="warmup-title">WARM-UP</div><div class="warmup-meta">5 MIN · TAP TO EXPAND</div></div>
+      </div>
+      <div class="warmup-toggle">▼</div>
+    </div>
+    <div class="warmup-body">
+      <div class="warmup-item"><div class="warmup-item-num">1</div><div class="warmup-item-info"><div class="warmup-item-name">Leg Swings (front to back)</div><div class="warmup-item-detail">10 each leg</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">2</div><div class="warmup-item-info"><div class="warmup-item-name">Leg Swings (side to side)</div><div class="warmup-item-detail">10 each leg</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">3</div><div class="warmup-item-info"><div class="warmup-item-name">Hip Circles</div><div class="warmup-item-detail">10 each direction</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">4</div><div class="warmup-item-info"><div class="warmup-item-name">Deep Squat Hold</div><div class="warmup-item-detail">Hold 30–60 sec, move gently</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">5</div><div class="warmup-item-info"><div class="warmup-item-name">5 × Slow Bodyweight Squats</div><div class="warmup-item-detail">3 sec down, full depth · wake up the joints</div></div></div>
+    </div>
+  </div>
+  <div id="tue-slot-0"></div>
+  <div id="tue-slot-1"></div>
+  <div id="tue-slot-2"></div>
+  <div class="complete-btn-wrap">
+    <button class="complete-btn" id="complete-tue" onclick="markDone('tue')">
+      <span id="complete-tue-icon">✓</span> Mark Workout Complete
+    </button>
+  </div>
+</div>
+
+<!-- WEDNESDAY — CORE -->
+<div class="day-content" id="day-wed">
+  <div class="day-header">
+    <div class="day-title">WEDNESDAY <span>CORE</span></div>
+    <div class="day-meta">
+      <span class="meta-pill">Core & Abs</span>
+      <span class="meta-pill">~20 min</span>
+      <span class="meta-pill green">3 exercises</span>
+    </div>
+  </div>
+  <div class="warmup-block" id="warmup-wed">
+    <div class="warmup-header" onclick="toggleWarmup('wed')">
+      <div class="warmup-header-left">
+        <div class="warmup-icon">🌡️</div>
+        <div><div class="warmup-title">WARM-UP</div><div class="warmup-meta">4 MIN · TAP TO EXPAND</div></div>
+      </div>
+      <div class="warmup-toggle">▼</div>
+    </div>
+    <div class="warmup-body">
+      <div class="warmup-item"><div class="warmup-item-num">1</div><div class="warmup-item-info"><div class="warmup-item-name">Cat-Cow</div><div class="warmup-item-detail">10 slow reps · wake up the spine</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">2</div><div class="warmup-item-info"><div class="warmup-item-name">Thoracic Rotation</div><div class="warmup-item-detail">8 each side · cross-legged, hands behind head</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">3</div><div class="warmup-item-info"><div class="warmup-item-name">Hip Flexor Stretch (kneeling)</div><div class="warmup-item-detail">30 sec each side</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">4</div><div class="warmup-item-info"><div class="warmup-item-name">Hollow Body Hold</div><div class="warmup-item-detail">10 sec · activate the core before loading it</div></div></div>
+    </div>
+  </div>
+  <div id="wed-slot-0"></div>
+  <div id="wed-slot-1"></div>
+  <div id="wed-slot-2"></div>
+  <div class="complete-btn-wrap">
+    <button class="complete-btn" id="complete-wed" onclick="markDone('wed')">
+      <span id="complete-wed-icon">✓</span> Mark Workout Complete
+    </button>
+  </div>
+</div>
+
+<!-- THURSDAY — PULL -->
+<div class="day-content" id="day-thu">
+  <div class="day-header">
+    <div class="day-title">THURSDAY <span>PULL</span></div>
+    <div class="day-meta">
+      <span class="meta-pill">Back & Shoulders</span>
+      <span class="meta-pill">~30 min</span>
+      <span class="meta-pill green">4 exercises</span>
+    </div>
+  </div>
+  <div class="warmup-block" id="warmup-thu">
+    <div class="warmup-header" onclick="toggleWarmup('thu')">
+      <div class="warmup-header-left">
+        <div class="warmup-icon">🌡️</div>
+        <div><div class="warmup-title">WARM-UP</div><div class="warmup-meta">5 MIN · TAP TO EXPAND</div></div>
+      </div>
+      <div class="warmup-toggle">▼</div>
+    </div>
+    <div class="warmup-body">
+      <div class="warmup-item"><div class="warmup-item-num">1</div><div class="warmup-item-info"><div class="warmup-item-name">Shoulder Dislocates (towel/band)</div><div class="warmup-item-detail">10 reps · wide grip, slow</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">2</div><div class="warmup-item-info"><div class="warmup-item-name">Wall Angels</div><div class="warmup-item-detail">8 reps · back flat to wall</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">3</div><div class="warmup-item-info"><div class="warmup-item-name">Wrist Prep (circles + flex/extend)</div><div class="warmup-item-detail">30 sec · critical for handstand work</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">4</div><div class="warmup-item-info"><div class="warmup-item-name">Prone Shoulder Squeeze</div><div class="warmup-item-detail">8 reps · activate before loading</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">5</div><div class="warmup-item-info"><div class="warmup-item-name">Scapular Push-Ups (3 × 5)</div><div class="warmup-item-detail">Protract + retract only · no elbow bend</div></div></div>
+    </div>
+  </div>
+  <div id="thu-slot-0"></div>
+  <div id="thu-slot-1"></div>
+  <div id="thu-slot-2"></div>
+  <div id="thu-slot-3"></div>
+  <div class="complete-btn-wrap">
+    <button class="complete-btn" id="complete-thu" onclick="markDone('thu')">
+      <span id="complete-thu-icon">✓</span> Mark Workout Complete
+    </button>
+  </div>
+</div>
+
+<!-- FRIDAY — FULL BODY -->
+<div class="day-content" id="day-fri">
+  <div class="day-header">
+    <div class="day-title">FRIDAY <span>FULL BODY</span></div>
+    <div class="day-meta">
+      <span class="meta-pill">Total Body</span>
+      <span class="meta-pill">~30 min</span>
+      <span class="meta-pill green">3 exercises</span>
+    </div>
+  </div>
+  <div class="warmup-block" id="warmup-fri">
+    <div class="warmup-header" onclick="toggleWarmup('fri')">
+      <div class="warmup-header-left">
+        <div class="warmup-icon">🌡️</div>
+        <div><div class="warmup-title">WARM-UP</div><div class="warmup-meta">6 MIN · TAP TO EXPAND</div></div>
+      </div>
+      <div class="warmup-toggle">▼</div>
+    </div>
+    <div class="warmup-body">
+      <div class="warmup-item"><div class="warmup-item-num">1</div><div class="warmup-item-info"><div class="warmup-item-name">Jumping Jacks</div><div class="warmup-item-detail">1 min · elevate heart rate</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">2</div><div class="warmup-item-info"><div class="warmup-item-name">Arm Circles + Leg Swings</div><div class="warmup-item-detail">30 sec each · full body mobilise</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">3</div><div class="warmup-item-info"><div class="warmup-item-name">Hip Circles</div><div class="warmup-item-detail">10 each direction</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">4</div><div class="warmup-item-info"><div class="warmup-item-name">5 × Inchworm</div><div class="warmup-item-detail">Walk hands out to plank, walk back</div></div></div>
+      <div class="warmup-item"><div class="warmup-item-num">5</div><div class="warmup-item-info"><div class="warmup-item-name">5 × Slow Squat + Reach</div><div class="warmup-item-detail">Deep squat, reach arms overhead</div></div></div>
+    </div>
+  </div>
+  <div id="fri-slot-0"></div>
+  <div id="fri-slot-1"></div>
+  <div id="fri-slot-2"></div>
+  <div class="complete-btn-wrap">
+    <button class="complete-btn" id="complete-fri" onclick="markDone('fri')">
+      <span id="complete-fri-icon">✓</span> Mark Workout Complete
+    </button>
+  </div>
+</div>
+
+<!-- SATURDAY — MOBILITY -->
+<div class="day-content" id="day-sat">
+  <div class="day-header">
+    <div class="day-title">SATURDAY <span>MOBILITY</span></div>
+    <div class="day-meta"><span class="meta-pill green">Active Recovery</span><span class="meta-pill">~20 min</span></div>
+  </div>
+  <div class="rest-day" style="text-align:left">
+    <div class="rest-icon">🌿</div>
+    <h3>MOBILITY DAY</h3>
+    <p>Light movement and stretching. The goal is to increase range of motion — directly improving your squat depth, shoulder flexibility, and hip mobility for advanced skills.</p>
+    <div class="mobility-list" id="mobilityList">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--accent);margin-bottom:10px">ROUTINE — TAP EACH TO CHECK OFF</div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Hip Flexor Lunge Stretch</strong> — kneel with one foot forward, drive hip forward and down. 2 min each side.</div></div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Deep Squat Hold</strong> — squat as low as possible, heels flat, elbows push knees out. 2–3 min total.</div></div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Pike Stretch</strong> — sit with legs straight, reach for toes. Crucial for L-sit. 2 min.</div></div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Wrist Circles &amp; Stretches</strong> — rotate, flex, extend. Your wrists carry all handstand weight. 2 min.</div></div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Shoulder Dislocates (towel)</strong> — hold towel wide, rotate overhead and behind. 10 reps.</div></div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Cat-Cow Spine Waves</strong> — on all fours, arch and round. 10 reps, slow.</div></div>
+      <div class="mobility-item" onclick="toggleMobility(this)"><div class="mob-check"></div><div class="mob-text"><strong>Thoracic Rotation</strong> — sit cross-legged, hands behind head, rotate upper back. 8 reps each.</div></div>
+      <div class="mob-progress-wrap">
+        <div class="mob-progress-bar"><div class="mob-progress-fill" id="mobProgressFill" style="width:0%"></div></div>
+        <div class="mob-progress-label" id="mobProgressLabel">0 / 7</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUNDAY — REST -->
+<div class="day-content" id="day-sun">
+  <div class="day-header">
+    <div class="day-title">SUNDAY <span>REST</span></div>
+    <div class="day-meta"><span class="meta-pill green">Full Recovery</span></div>
+  </div>
+  <div class="rest-day">
+    <div class="rest-icon">💤</div>
+    <h3>FULL REST DAY</h3>
+    <p>Rest is when your muscles grow and your nervous system consolidates movement patterns. Walk, sleep, eat well. Come back Monday ready.</p>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:4px">
+    <div style="font-size:22px;margin-bottom:10px">🧠</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px">Mental Rehearsal</div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2);margin-bottom:12px">Optional · 5–10 min</div>
+    <p class="ex-desc">Visualise performing each exercise with perfect form. Research shows mental rehearsal genuinely improves physical skill. Pick one movement — handstand, pistol squat, L-sit — and run through 5–10 perfect reps in your mind in detail.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TIPS -->
+<div class="section-label" style="margin-top:8px">Golden Rules</div>
+<div class="tips-grid">
+  <div class="tip-card"><div class="tip-icon">⚖️</div><div class="tip-title">Stop at 80%</div><div class="tip-body">Always leave 2–3 reps in the tank. Never train to failure.</div></div>
+  <div class="tip-card"><div class="tip-icon">📏</div><div class="tip-title">Form First</div><div class="tip-body">One clean rep beats five sloppy ones. Bad habits take months to undo.</div></div>
+  <div class="tip-card"><div class="tip-icon">🐢</div><div class="tip-title">Progress Slowly</div><div class="tip-body">Move up only when the current level feels genuinely easy.</div></div>
+  <div class="tip-card"><div class="tip-icon">😴</div><div class="tip-title">Sleep is Training</div><div class="tip-body">8 hours accelerates skill acquisition dramatically.</div></div>
+  <div class="tip-card"><div class="tip-icon">🔄</div><div class="tip-title">Consistency Wins</div><div class="tip-body">20 min daily for a year beats a 2-hour session once a week.</div></div>
+  <div class="tip-card"><div class="tip-icon">💾</div><div class="tip-title">Auto-Saved</div><div class="tip-body">Your level on each exercise is saved on this device automatically.</div></div>
+</div>
+
+<footer>
+  <p>Calisthenics Mastery · Floor Only · Built for Consistency</p>
+  <p style="margin-top:7px;opacity:.35">Save this file to your phone for offline access</p>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// EXERCISE DATA
+// Each exercise has up to 7 progressions with full detail
+// ══════════════════════════════════════════════════════════
+
+const LEVEL_NAMES = ['Beginner','Novice','Intermediate','Advanced','Expert','Elite','Master'];
+const LEVEL_CLASSES = ['lv1','lv2','lv3','lv4','lv5','lv6','lv7'];
+
+// SVGs — unique illustration per movement category
+const SVG = {
+  kneesPushup: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="58" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="65" x2="70" y2="78" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="35" y1="68" x2="32" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="32" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="52" y1="73" x2="56" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="56" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="70" y1="78" x2="76" y2="92" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="76" cy="92" r="4" fill="#5effa0" opacity=".5"/>
+    <text x="78" y="80" fill="#5effa0" font-size="7" font-family="monospace">KNEES</text>
+  </svg>`,
+  pushup: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="60" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="67" x2="90" y2="78" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="35" y1="69" x2="32" y2="90" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="32" cy="90" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="52" y1="73" x2="56" y2="90" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="56" cy="90" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="90" y1="78" x2="97" y2="91" stroke="#c8f135" stroke-width="2"/>
+    <path d="M60 55 L60 40 M55 45 L60 40 L65 45" stroke="#5effa0" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  diamondPushup: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="60" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="67" x2="90" y2="78" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="42" y1="71" x2="50" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <line x1="54" y1="74" x2="46" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="48" cy="89" r="3" fill="#c8f135" opacity=".5"/>
+    <polygon points="48,78 44,85 48,89 52,85" stroke="#5effa0" stroke-width="1.2" fill="none"/>
+    <line x1="90" y1="78" x2="97" y2="91" stroke="#c8f135" stroke-width="2"/>
+    <text x="58" y="90" fill="#5effa0" font-size="7" font-family="monospace">DIAMOND</text>
+  </svg>`,
+  archerPushup: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="55" cy="58" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="65" x2="90" y2="75" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="65" x2="20" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="65" y1="68" x2="62" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="62" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="30" y1="70" x2="22" y2="88" stroke="#c8f135" stroke-width="1.5"/>
+    <circle cx="22" cy="88" r="3" fill="#5effa0" opacity=".4"/>
+    <line x1="90" y1="75" x2="96" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <text x="8" y="60" fill="#5effa0" font-size="7" font-family="monospace">ARCHER</text>
+  </svg>`,
+  pseudoPlanche: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="58" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="65" x2="90" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="35" y1="67" x2="25" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="25" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="50" y1="69" x2="44" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="44" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <text x="55" y="63" fill="#ff8c32" font-size="7" font-family="monospace">LEAN FWD</text>
+    <path d="M55 65 L65 68" stroke="#ff8c32" stroke-width="1" stroke-linecap="round"/>
+    <line x1="90" y1="72" x2="97" y2="88" stroke="#c8f135" stroke-width="2"/>
+  </svg>`,
+  tuckedPlanche: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="50" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="53" y1="53" x2="35" y2="78" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="35" cy="78" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="67" y1="53" x2="85" y2="78" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="85" cy="78" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="60" y1="57" x2="55" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <path d="M55 72 Q48 82 45 78" stroke="#c8f135" stroke-width="2" fill="none"/>
+    <path d="M55 72 Q62 82 65 78" stroke="#c8f135" stroke-width="2" fill="none"/>
+    <text x="68" y="48" fill="#dc32ff" font-size="7" font-family="monospace">TUCK</text>
+  </svg>`,
+  oneArmPushup: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="60" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="67" x2="90" y2="76" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="42" y1="70" x2="38" y2="90" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="38" cy="90" r="3" fill="#c8f135" opacity=".7"/>
+    <line x1="55" y1="72" x2="60" y2="82" stroke="#c8f135" stroke-width="1.5"/>
+    <line x1="60" y1="82" x2="50" y2="90" stroke="#c8f135" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <line x1="90" y1="76" x2="96" y2="90" stroke="#c8f135" stroke-width="2"/>
+    <text x="62" y="68" fill="#32aaff" font-size="7" font-family="monospace">ONE ARM</text>
+  </svg>`,
+  squat: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="40" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="60" y1="48" x2="57" y2="68" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="57" y1="55" x2="35" y2="58" stroke="#c8f135" stroke-width="2"/>
+    <line x1="57" y1="68" x2="40" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="57" y1="68" x2="74" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="40" y1="82" x2="38" y2="93" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="74" y1="82" x2="76" y2="93" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="40" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <circle cx="74" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+  </svg>`,
+  lunge: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="55" cy="30" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="38" x2="55" y2="65" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="65" x2="50" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="50" y1="82" x2="48" y2="93" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="65" x2="75" y2="80" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="75" y1="80" x2="80" y2="93" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="50" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="52" y1="48" x2="38" y2="65" stroke="#c8f135" stroke-width="1.5"/>
+  </svg>`,
+  pistolSqNeg: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="55" cy="32" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="40" x2="52" y2="65" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="52" y1="65" x2="46" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="52" y1="65" x2="72" y2="60" stroke="#c8f135" stroke-width="2"/>
+    <line x1="72" y1="60" x2="88" y2="58" stroke="#c8f135" stroke-width="2"/>
+    <line x1="50" y1="48" x2="35" y2="58" stroke="#c8f135" stroke-width="1.5"/>
+    <line x1="60" y1="48" x2="72" y2="55" stroke="#c8f135" stroke-width="1.5"/>
+    <text x="60" y="88" fill="#5effa0" font-size="7" font-family="monospace">LEG OUT</text>
+  </svg>`,
+  pistolSq: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="50" cy="35" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="50" y1="43" x2="47" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="47" y1="72" x2="44" y2="93" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="47" y1="72" x2="68" y2="62" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="68" y1="62" x2="85" y2="58" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="47" y1="50" x2="30" y2="60" stroke="#c8f135" stroke-width="1.5"/>
+    <line x1="53" y1="50" x2="66" y2="58" stroke="#c8f135" stroke-width="1.5"/>
+    <circle cx="44" cy="93" r="3" fill="#c8f135" opacity=".7"/>
+    <text x="72" y="54" fill="#dc32ff" font-size="7" font-family="monospace">PISTOL!</text>
+  </svg>`,
+  plank: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="68" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="75" x2="95" y2="80" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="30" y1="76" x2="28" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="28" cy="92" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="45" y1="77" x2="48" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="48" cy="92" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="95" y1="80" x2="100" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="68" x2="100" y2="73" stroke="#5effa0" stroke-width="1" stroke-dasharray="4 3" opacity=".4"/>
+  </svg>`,
+  rkc: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="68" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="75" x2="95" y2="80" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="30" y1="76" x2="28" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="28" cy="92" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="45" y1="77" x2="48" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="48" cy="92" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="95" y1="80" x2="100" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <text x="55" y="68" fill="#ff8c32" font-size="7" font-family="monospace">MAX TENSION</text>
+    <ellipse cx="60" cy="77" rx="20" ry="4" stroke="#ff8c32" stroke-width="1" fill="none" opacity=".4"/>
+  </svg>`,
+  hollowBody: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="75" x2="110" y2="75" stroke="#2a2a38" stroke-width="2"/>
+    <path d="M 15 72 Q 60 55 105 70" stroke="#c8f135" stroke-width="2.5" fill="none"/>
+    <circle cx="18" cy="65" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="18" y1="58" x2="10" y2="50" stroke="#c8f135" stroke-width="2"/>
+    <line x1="25" y1="60" x2="18" y2="52" stroke="#c8f135" stroke-width="2"/>
+    <line x1="98" y1="67" x2="110" y2="58" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="95" y1="70" x2="108" y2="62" stroke="#c8f135" stroke-width="2.5"/>
+  </svg>`,
+  lSit: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="90" x2="110" y2="90" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="55" cy="50" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="58" x2="55" y2="78" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="48" y1="68" x2="35" y2="82" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="35" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="62" y1="68" x2="75" y2="82" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="75" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="55" y1="78" x2="40" y2="78" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="78" x2="88" y2="78" stroke="#c8f135" stroke-width="2.5"/>
+    <text x="58" y="74" fill="#dc32ff" font-size="7" font-family="monospace">L-SIT</text>
+  </svg>`,
+  superman: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="75" x2="110" y2="75" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="62" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="53" y1="65" x2="80" y2="68" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="53" y1="65" x2="30" y2="55" stroke="#c8f135" stroke-width="2"/>
+    <line x1="53" y1="66" x2="28" y2="60" stroke="#c8f135" stroke-width="2"/>
+    <line x1="80" y1="68" x2="98" y2="58" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="80" y1="68" x2="100" y2="64" stroke="#c8f135" stroke-width="2.5"/>
+    <text x="35" y="48" fill="#5effa0" font-size="8" font-family="monospace">LIFT &amp; HOLD</text>
+  </svg>`,
+  handstand: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="5" x2="100" y2="115" stroke="#2a2a38" stroke-width="3"/>
+    <line x1="10" y1="110" x2="100" y2="110" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="70" cy="15" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="70" y1="22" x2="70" y2="75" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="70" y1="18" x2="92" y2="15" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="92" cy="15" r="3" fill="#c8f135" opacity=".6"/>
+    <line x1="70" y1="20" x2="92" y2="20" stroke="#c8f135" stroke-width="2"/>
+    <line x1="65" y1="75" x2="60" y2="108" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="60" cy="108" r="4" fill="#c8f135" opacity=".5"/>
+    <line x1="75" y1="75" x2="80" y2="108" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="80" cy="108" r="4" fill="#c8f135" opacity=".5"/>
+  </svg>`,
+  burpee: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="20" cy="38" r="6" stroke="#c8f135" stroke-width="2"/>
+    <line x1="20" y1="44" x2="20" y2="65" stroke="#c8f135" stroke-width="2"/>
+    <line x1="20" y1="65" x2="14" y2="80" stroke="#c8f135" stroke-width="2"/>
+    <line x1="20" y1="65" x2="26" y2="80" stroke="#c8f135" stroke-width="2"/>
+    <path d="M 30 60 L 42 60 M 38 57 L 42 60 L 38 63" stroke="#5effa0" stroke-width="1" stroke-linecap="round"/>
+    <circle cx="55" cy="55" r="6" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="61" x2="90" y2="70" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="63" y1="63" x2="62" y2="80" stroke="#c8f135" stroke-width="1.5"/>
+    <line x1="73" y1="65" x2="76" y2="80" stroke="#c8f135" stroke-width="1.5"/>
+    <line x1="90" y1="70" x2="96" y2="80" stroke="#c8f135" stroke-width="1.5"/>
+  </svg>`,
+  mountainClimber: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="52" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="59" x2="80" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="32" y1="61" x2="30" y2="85" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="30" cy="85" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="48" y1="65" x2="52" y2="85" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="52" cy="85" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="80" y1="72" x2="65" y2="82" stroke="#c8f135" stroke-width="2.5" stroke-dasharray="5 3"/>
+    <line x1="65" y1="82" x2="62" y2="92" stroke="#c8f135" stroke-width="2"/>
+    <line x1="80" y1="72" x2="95" y2="85" stroke="#c8f135" stroke-width="2.5"/>
+    <path d="M 65 75 L 60 82" stroke="#5effa0" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+  bearCrawl: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="90" x2="110" y2="90" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="30" cy="55" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="30" y1="62" x2="70" y2="70" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="35" y1="63" x2="28" y2="82" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="28" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="50" y1="66" x2="50" y2="82" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="50" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="70" y1="70" x2="75" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="75" cy="82" r="3" fill="#5effa0" opacity=".8"/>
+    <line x1="70" y1="70" x2="88" y2="75" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="88" cy="75" r="3" fill="#5effa0" opacity=".8"/>
+    <line x1="75" y1="82" x2="75" y2="88" stroke="#5effa0" stroke-width="1" stroke-dasharray="2 2"/>
+  </svg>`,
+  glute: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <line x1="20" y1="88" x2="55" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="18" cy="83" r="6" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="88" x2="70" y2="62" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="70" y1="62" x2="75" y2="93" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="70" cy="62" r="4" fill="#c8f135" opacity=".6"/>
+    <line x1="55" y1="88" x2="65" y2="60" stroke="#c8f135" stroke-width="2"/>
+    <line x1="65" y1="60" x2="68" y2="93" stroke="#c8f135" stroke-width="2"/>
+    <line x1="40" y1="88" x2="30" y2="93" stroke="#c8f135" stroke-width="1.5"/>
+    <text x="78" y="58" fill="#5effa0" font-size="8" font-family="monospace">SQUEEZE</text>
+  </svg>`,
+  deadbug: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="70" x2="110" y2="70" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="62" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="45" y1="65" x2="75" y2="65" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="50" y1="65" x2="40" y2="48" stroke="#c8f135" stroke-width="2"/>
+    <line x1="60" y1="65" x2="75" y2="50" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="65" x2="45" y2="52" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="45" cy="52" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="65" y1="65" x2="85" y2="55" stroke="#c8f135" stroke-width="2"/>
+    <line x1="85" y1="55" x2="100" y2="63" stroke="#c8f135" stroke-width="2"/>
+    <path d="M40 48 L33 42 M100 63 L107 68" stroke="#5effa0" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  scapular: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="60" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="67" x2="90" y2="75" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="35" y1="68" x2="33" y2="90" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="33" cy="90" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="52" y1="70" x2="56" y2="90" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="56" cy="90" r="3" fill="#c8f135" opacity=".5"/>
+    <ellipse cx="38" cy="69" rx="8" ry="5" stroke="#ff6b6b" stroke-width="1.5" opacity=".6" transform="rotate(-10,38,69)"/>
+    <line x1="90" y1="75" x2="96" y2="90" stroke="#c8f135" stroke-width="2"/>
+    <text x="48" y="55" fill="#ff6b6b" font-size="7" font-family="monospace">SCAPS</text>
+  </svg>`,
+
+  /* Inverted-V pike / pike push-up */
+  pike: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="25" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="60" y1="32" x2="55" y2="55" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="55" x2="30" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="30" cy="88" r="4" fill="#5effa0" opacity=".6"/>
+    <line x1="55" y1="55" x2="82" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="82" cy="88" r="4" fill="#5effa0" opacity=".6"/>
+    <line x1="55" y1="40" x2="40" y2="45" stroke="#c8f135" stroke-width="2"/>
+    <line x1="57" y1="40" x2="72" y2="48" stroke="#c8f135" stroke-width="2"/>
+    <text x="62" y="35" fill="#5effa0" font-size="7" font-family="monospace">PIKE</text>
+  </svg>`,
+
+  /* Floor/bench dip — person sitting, arms behind, hips lifted */
+  dip: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="55" cy="40" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="48" x2="55" y2="68" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="68" x2="38" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="68" x2="72" y2="90" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="52" y1="55" x2="30" y2="70" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="30" cy="70" r="3" fill="#5effa0" opacity=".6"/>
+    <line x1="58" y1="55" x2="80" y2="70" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="80" cy="70" r="3" fill="#5effa0" opacity=".6"/>
+    <text x="60" y="58" fill="#5effa0" font-size="7" font-family="monospace">DIP</text>
+  </svg>`,
+
+  /* Tricep pushdown — standing, arms pressing down */
+  tricepDown: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="30" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="60" y1="38" x2="60" y2="65" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="60" y1="65" x2="48" y2="80" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="60" y1="65" x2="72" y2="80" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="58" y1="45" x2="42" y2="50" stroke="#c8f135" stroke-width="2"/>
+    <line x1="42" y1="50" x2="38" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="38" cy="72" r="3" fill="#5effa0" opacity=".6"/>
+    <line x1="62" y1="45" x2="78" y2="50" stroke="#c8f135" stroke-width="2"/>
+    <line x1="78" y1="50" x2="82" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="82" cy="72" r="3" fill="#5effa0" opacity=".6"/>
+    <path d="M38 72 L44 78 M82 72 L76 78" stroke="#ff8c32" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="62" y="38" fill="#5effa0" font-size="7" font-family="monospace">PRESS</text>
+  </svg>`,
+
+  /* Back bridge / wheel pose — face up, arched */
+  bridge: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <path d="M 25 88 Q 60 30 95 88" stroke="#c8f135" stroke-width="2.5" fill="none"/>
+    <circle cx="25" cy="88" r="4" fill="#5effa0" opacity=".6"/>
+    <circle cx="95" cy="88" r="4" fill="#5effa0" opacity=".6"/>
+    <circle cx="60" cy="32" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="53" y1="35" x2="25" y2="48" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="25" cy="48" r="3" fill="#c8f135" opacity=".4"/>
+    <line x1="67" y1="35" x2="95" y2="48" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="95" cy="48" r="3" fill="#c8f135" opacity=".4"/>
+    <text x="48" y="60" fill="#ff8c32" font-size="7" font-family="monospace">BRIDGE</text>
+  </svg>`,
+
+  /* Tuck L-sit — seated, knees to chest, hips lifted */
+  tuckSit: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="90" x2="110" y2="90" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="55" cy="50" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="58" x2="55" y2="75" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="48" y1="68" x2="35" y2="82" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="35" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="62" y1="68" x2="75" y2="82" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="75" cy="82" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="55" y1="75" x2="42" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <path d="M42 72 Q38 75 40 80" stroke="#c8f135" stroke-width="2" fill="none"/>
+    <line x1="55" y1="75" x2="68" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <path d="M68 72 Q72 75 70 80" stroke="#c8f135" stroke-width="2" fill="none"/>
+    <text x="60" y="66" fill="#5effa0" font-size="7" font-family="monospace">TUCK</text>
+  </svg>`,
+
+  /* V-sit — legs raised above horizontal */
+  vSit: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="90" x2="110" y2="90" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="50" cy="58" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="50" y1="66" x2="50" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="44" y1="72" x2="32" y2="84" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="32" cy="84" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="56" y1="72" x2="68" y2="84" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="68" cy="84" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="50" y1="82" x2="35" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="50" y1="82" x2="35" y2="82" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="50" y1="76" x2="72" y2="52" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="50" y1="76" x2="82" y2="48" stroke="#c8f135" stroke-width="2.5"/>
+    <text x="70" y="44" fill="#dc32ff" font-size="7" font-family="monospace">V-SIT!</text>
+  </svg>`,
+
+  /* Wrist warm-up / standing prep */
+  wrist: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="28" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="60" y1="36" x2="60" y2="65" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="60" y1="65" x2="48" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="60" y1="65" x2="72" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="58" y1="46" x2="38" y2="52" stroke="#c8f135" stroke-width="2"/>
+    <line x1="38" y1="52" x2="32" y2="65" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="32" cy="65" r="4" stroke="#5effa0" stroke-width="1.5"/>
+    <path d="M28 65 Q32 58 36 65 Q32 72 28 65" stroke="#5effa0" stroke-width="1.2" fill="none"/>
+    <line x1="62" y1="46" x2="82" y2="52" stroke="#c8f135" stroke-width="2"/>
+    <line x1="82" y1="52" x2="88" y2="65" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="88" cy="65" r="4" stroke="#5effa0" stroke-width="1.5"/>
+    <path d="M84 65 Q88 58 92 65 Q88 72 84 65" stroke="#5effa0" stroke-width="1.2" fill="none"/>
+    <text x="44" y="40" fill="#5effa0" font-size="7" font-family="monospace">WRIST PREP</text>
+  </svg>`,
+
+  /* Crab walk — face up, hands behind, hips elevated, walking */
+  crabWalk: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="45" r="7" stroke="#c8f135" stroke-width="2"/>
+    <path d="M 25 82 Q 60 50 95 82" stroke="#c8f135" stroke-width="2.5" fill="none"/>
+    <line x1="25" y1="82" x2="22" y2="93" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="22" cy="93" r="3" fill="#5effa0" opacity=".6"/>
+    <line x1="95" y1="82" x2="98" y2="93" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="98" cy="93" r="3" fill="#5effa0" opacity=".6"/>
+    <line x1="48" y1="80" x2="38" y2="93" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="38" cy="93" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="72" y1="80" x2="80" y2="93" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="80" cy="93" r="3" fill="#c8f135" opacity=".5"/>
+    <text x="44" y="42" fill="#5effa0" font-size="7" font-family="monospace">CRAB</text>
+  </svg>`,
+
+  /* Nordic curl — kneeling, torso lowering */
+  nordic: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="35" cy="35" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="35" y1="42" x2="55" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="42" y1="52" x2="50" y2="42" stroke="#c8f135" stroke-width="2"/>
+    <line x1="50" y1="42" x2="65" y2="50" stroke="#c8f135" stroke-width="2"/>
+    <line x1="55" y1="72" x2="45" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="45" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="55" y1="72" x2="70" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="70" cy="88" r="3" fill="#c8f135" opacity=".5"/>
+    <line x1="45" y1="88" x2="80" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <path d="M75 88 L82 88" stroke="#ff8c32" stroke-width="2" stroke-linecap="round"/>
+    <text x="55" y="38" fill="#ff8c32" font-size="7" font-family="monospace">NORDIC</text>
+  </svg>`,
+
+  /* High plank — straight arms, body rigid */
+  highPlank: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="22" cy="58" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="22" y1="65" x2="92" y2="72" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="22" y1="65" x2="100" y2="70" stroke="#5effa0" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+    <line x1="35" y1="67" x2="32" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="32" cy="88" r="4" fill="#5effa0" opacity=".6"/>
+    <line x1="52" y1="69" x2="55" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="55" cy="88" r="4" fill="#5effa0" opacity=".6"/>
+    <line x1="92" y1="72" x2="98" y2="88" stroke="#c8f135" stroke-width="2.5"/>
+    <text x="55" y="58" fill="#5effa0" font-size="7" font-family="monospace">ARMS STRAIGHT</text>
+  </svg>`,
+
+  /* Inversion / headstand — head and hands on floor, legs up (or partially) */
+  inversion: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="95" x2="110" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="88" r="5" fill="#c8f135" opacity=".5" stroke="#c8f135" stroke-width="1.5"/>
+    <line x1="48" y1="88" x2="60" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="45" cy="88" r="3" fill="#5effa0" opacity=".5"/>
+    <line x1="72" y1="88" x2="60" y2="88" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="75" cy="88" r="3" fill="#5effa0" opacity=".5"/>
+    <line x1="60" y1="83" x2="60" y2="55" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="55" y1="70" x2="40" y2="65" stroke="#c8f135" stroke-width="2"/>
+    <line x1="65" y1="70" x2="80" y2="65" stroke="#c8f135" stroke-width="2"/>
+    <line x1="60" y1="55" x2="55" y2="30" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="60" y1="55" x2="65" y2="30" stroke="#c8f135" stroke-width="2.5"/>
+    <circle cx="60" cy="24" r="5" stroke="#c8f135" stroke-width="2"/>
+    <text x="68" y="50" fill="#5effa0" font-size="7" font-family="monospace">INVERTED</text>
+  </svg>`,
+
+  /* Wall angel — standing, arms sliding up wall */
+  wallAngel: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="10" x2="100" y2="110" stroke="#2a2a38" stroke-width="3"/>
+    <line x1="10" y1="95" x2="100" y2="95" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="70" cy="32" r="8" stroke="#c8f135" stroke-width="2"/>
+    <line x1="70" y1="40" x2="70" y2="70" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="70" y1="70" x2="60" y2="90" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="70" y1="70" x2="80" y2="90" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="68" y1="50" x2="97" y2="42" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="97" cy="42" r="3" fill="#5effa0" opacity=".7"/>
+    <line x1="68" y1="55" x2="97" y2="55" stroke="#c8f135" stroke-width="2"/>
+    <circle cx="97" cy="55" r="3" fill="#5effa0" opacity=".7"/>
+    <path d="M 97 30 L 97 20" stroke="#5effa0" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <text x="15" y="50" fill="#5effa0" font-size="7" font-family="monospace">WALL ANGEL</text>
+  </svg>`,
+
+  /* Prone row — lying face down, elbows pulling back */
+  proneRow: `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="75" x2="110" y2="75" stroke="#2a2a38" stroke-width="2"/>
+    <circle cx="60" cy="62" r="7" stroke="#c8f135" stroke-width="2"/>
+    <line x1="53" y1="65" x2="80" y2="68" stroke="#c8f135" stroke-width="2.5"/>
+    <line x1="80" y1="68" x2="100" y2="62" stroke="#c8f135" stroke-width="2"/>
+    <line x1="53" y1="65" x2="28" y2="62" stroke="#c8f135" stroke-width="2"/>
+    <line x1="50" y1="66" x2="42" y2="58" stroke="#c8f135" stroke-width="2"/>
+    <line x1="42" y1="58" x2="55" y2="52" stroke="#c8f135" stroke-width="2.5"/>
+    <path d="M 95 62 L 90 62 M 90 62 L 84 60" stroke="#5effa0" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="28" y="52" fill="#5effa0" font-size="7" font-family="monospace">PULL BACK</text>
+  </svg>`,
+};
+
+// ══════════════════════════════════════════════════════════
+// EXERCISE PROGRESSIONS
+// Each entry: { name, sets, levelName, svg, desc, cues[] }
+// ══════════════════════════════════════════════════════════
+
+const PROGRESSIONS = {
+
+  pushup: [
+    { name:'Wall Push-Up', sets:'3 × 10–15 reps · 60s rest', svg: SVG.kneesPushup,
+      desc:'Stand facing a wall and push against it. The perfect starting point to learn push-up mechanics without supporting your full bodyweight.',
+      cues:['Stand arms-length from wall, hands flat at shoulder height','Lean in until chest nearly touches wall','Push back to straight arms','Body straight throughout — no bending at hips','Breathe out on push, in on return'] },
+    { name:'Incline Push-Up', sets:'3 × 10–12 reps · 60s rest', svg: SVG.kneesPushup,
+      desc:'Hands on a raised surface (step, couch). The higher the surface, the easier. Lower it as you get stronger.',
+      cues:['Hands on elevated surface, body in plank','Lower chest to the surface','Full range of motion — chest touches','Hips don\'t sag or pike','Unlock elbows slightly at top'] },
+    { name:'Knee Push-Up', sets:'3 × 8–12 reps · 60s rest', svg: SVG.kneesPushup,
+      desc:'Classic modified push-up on your knees. Build chest and tricep strength in a controlled way before moving to full push-ups.',
+      cues:['Knees on floor, body straight from knee to head','Hands just outside shoulder width','Lower chest to 1cm from floor','Elbows at ~45° — not flared wide','Squeeze glutes and brace core'] },
+    { name:'Full Push-Up', sets:'3 × 6–10 reps · 75s rest', svg: SVG.pushup,
+      desc:'The foundation of upper-body calisthenics. Chest, shoulders, triceps and a rigid core all working as one unit.',
+      cues:['Hands shoulder-width, fingers forward','Straight line from head to heels — no sagging','Lower chest 1–2cm from floor','Exhale as you push up','Squeeze everything at the top'] },
+    { name:'Diamond Push-Up', sets:'3 × 6–8 reps · 90s rest', svg: SVG.diamondPushup,
+      desc:'Hands form a diamond/triangle shape under your chest. Dramatically increases tricep demand and prepares forearms for advanced leverage work.',
+      cues:['Index fingers and thumbs form a triangle','Elbows track backward (not flaring out)','Lower very slowly — this is harder than it looks','Chest goes to hands, not past them','Keep core totally rigid'] },
+    { name:'Archer Push-Up', sets:'3 × 4–6 each side · 90s rest', svg: SVG.archerPushup,
+      desc:'Hands wide apart. You push with one arm while the other stays mostly straight — an unilateral loading pattern that builds the strength for one-arm push-ups.',
+      cues:['Hands 1.5× shoulder-width, arms extended','Shift body to one side as you lower','Working arm bends, straight arm stays extended','Alternate sides each rep, or do sets per side','Control is everything here — no flopping'] },
+    { name:'One-Arm Push-Up', sets:'3 × 2–4 each side · 2 min rest', svg: SVG.oneArmPushup,
+      desc:'The pinnacle of floor pushing strength. One arm, full body tension, perfect alignment. This is a mastery-level skill that takes months to build.',
+      cues:['Feet wider than shoulders for stability','One hand centred under chest, other behind back','Body stays square — resist rotation','Elbow tracks close to body','Start with elevated surface if needed — build down'] },
+  ],
+
+  pike: [
+    { name:'Incline Pike Push-Up', sets:'3 × 6–8 reps · 75s rest', svg: SVG.pike,
+      desc:'Hands elevated on a surface with hips raised. A gentler introduction to loading the shoulders overhead — the starting point for handstand pressing.',
+      cues:['Hands elevated (couch, step), hips high in V shape','Head travels toward the surface, not the floor','Shoulders do the work — it\'s not a chest exercise','Straight legs if possible, but bent is fine','Drive back up through your shoulders'] },
+    { name:'Pike Push-Up', sets:'3 × 5–7 reps · 90s rest', svg: SVG.pike,
+      desc:'The floor pike push-up. Your body makes an inverted V and you lower your head toward the floor between your hands. The direct precursor to the handstand push-up.',
+      cues:['Hips as high as you can get them','Head travels toward floor — between hands','Legs stay as straight as possible','Shoulders press you back up (not chest)','Look at your toes, not forward'] },
+    { name:'Elevated Pike Push-Up', sets:'3 × 5–6 reps · 90s rest', svg: SVG.pike,
+      desc:'Feet elevated on a couch or step, increasing the angle toward vertical. Loads your shoulders even more than the flat pike — closer to handstand territory.',
+      cues:['Feet on elevated surface, hands on floor','Hips over shoulders — near vertical if possible','Head nearly touches floor on each rep','Full range — lockout at top','Keep forearms perpendicular to floor'] },
+    { name:'Wall Headstand Hold', sets:'3 × 15–30 sec · 90s rest', svg: SVG.inversion,
+      desc:'Kick up to a wall headstand to get comfortable inverted. The head provides a safety point while you build shoulder endurance for freestanding work.',
+      cues:['Tripod base: head and two hands form triangle','Walk feet up wall, knees first','Straight arms (convert to forearms is fine)','Full body tension — squeeze glutes and core','Look at floor, breathe slowly'] },
+    { name:'Wall Handstand (back to wall)', sets:'3 × 20–30 sec · 2 min rest', svg: SVG.handstand,
+      desc:'Kick up with your back facing the wall. Easier than chest-to-wall, good for building handstand endurance and confidence.',
+      cues:['Kick up one leg at a time — controlled','Arms fully locked, push floor away','Glutes squeezed, toes pointed','Breathe — don\'t hold your breath','If losing balance, step one foot off wall to bail'] },
+    { name:'Chest-to-Wall Handstand', sets:'3 × 20–30 sec · 2 min rest', svg: SVG.handstand,
+      desc:'Hands near the wall, belly facing wall. Forces proper hollow body position and trains the real handstand shape — this is the correct handstand form.',
+      cues:['Walk feet up wall, hands 5–15cm from wall','Shoulders pushed up (protracted), arms locked','Hollow body — slight curve, not arched back','Look at floor between hands','Shift weight to fingertips for balance practice'] },
+    { name:'Freestanding Handstand', sets:'3 × max hold · 2 min rest', svg: SVG.handstand,
+      desc:'The freestanding handstand. Balance is controlled through wrist flexion and fingertip pressure. This is elite calisthenics territory.',
+      cues:['Kick up slowly — overcorrect less','Fingertips press down to correct forward tipping','Slight hollow body — not banana arch','Eyes on floor 15–20cm in front of hands','10 seconds is good. 30 seconds is mastery'] },
+  ],
+
+  tricepDip: [
+    { name:'Tricep Pushdown (towel)', sets:'3 × 10 reps · 60s rest', svg: SVG.tricepDown,
+      desc:'Grip a towel looped around a door handle and push it down with locked elbows. Isolates the tricep in a simple pulling-against-resistance manner.',
+      cues:['Stand close to door, towel at elbow height','Start with elbows bent at 90°','Push hands straight down by extending elbows only','Squeeze triceps at bottom — hold 1 second','Upper arms stay fixed against your sides'] },
+    { name:'Narrow Push-Up Hold', sets:'3 × 6–8 reps · 75s rest', svg: SVG.diamondPushup,
+      desc:'A tricep-focused push-up with hands directly under shoulders, targeting the triceps more than a standard push-up.',
+      cues:['Hands directly under shoulders (narrower than normal)','Elbows track back close to body — not flaring','Lower slowly in 3 seconds','Pause at the bottom — no bouncing','Squeeze triceps fully at top'] },
+    { name:'Floor Tricep Dip', sets:'3 × 6–8 reps · 60s rest', svg: SVG.dip,
+      desc:'Sit on the floor, hands behind you, hips lifted. A fully floor-based dip that builds tricep pressing strength without any furniture needed.',
+      cues:['Hands behind, fingers pointing toward feet','Lift hips — don\'t let them touch floor','Bend elbows backward only — not flaring','Full range: arms nearly straight at top','Shoulders away from ears throughout'] },
+    { name:'Bench/Step Tricep Dip', sets:'3 × 8–10 reps · 75s rest', svg: SVG.dip,
+      desc:'Use a sturdy step, low table, or staircase. Greater range of motion than floor dips — the closer the feet, the easier.',
+      cues:['Grip edge with hands, feet on floor','Lower until upper arms near parallel','Elbows track straight back — not sideways','Press back up to near-lockout','Legs further from surface = harder'] },
+    { name:'Straight Bar Dip (floor)', sets:'3 × 6–8 reps · 90s rest', svg: SVG.dip,
+      desc:'Use two equal-height chairs or parallel elevated surfaces. A more vertical dip movement that increases shoulder and tricep loading significantly.',
+      cues:['Grip surfaces, arms straight at start','Lean slightly forward for chest involvement','Elbows track backward — controlled descent','Lower until upper arms parallel or below','Drive through palms to full extension'] },
+    { name:'Russian Dip', sets:'3 × 5–6 reps · 90s rest', svg: SVG.dip,
+      desc:'From the dip support position, lower to your forearms (like a reverse push-up on bars), then press back up. Extreme tricep and chest strength.',
+      cues:['From support position, lower to forearms slowly','Forearms parallel to each other on bars','Reverse: press elbows back to straight arms','Body upright throughout — don\'t lean excessively','This is a very advanced movement — take months to build'] },
+    { name:'Korean Dip (pseudo)', sets:'3 × 3–5 reps · 2 min rest', svg: SVG.pseudoPlanche,
+      desc:'Hands behind hips (fingers pointing backward), dip with arms behind the torso. Maximum tricep and shoulder mobility challenge. Elite territory.',
+      cues:['Hands on floor behind hips, fingers facing backward','Body in front of hands — leaning back','Lower by bending elbows behind you','Extreme wrist flexibility required — build slowly','Stop immediately if wrists hurt'] },
+  ],
+
+  squat: [
+    { name:'Assisted Squat (wall)', sets:'3 × 10–15 reps · 60s rest', svg: SVG.squat,
+      desc:'Hold a door frame or wall for balance while you learn the squat pattern. Removes the fear of falling backward and lets you go deeper safely.',
+      cues:['Hold something fixed at arm\'s length for support','Feet shoulder-width, toes out slightly','Sit down and back — as low as you can go','Keep chest up throughout','Use the support less and less over time'] },
+    { name:'Box Squat', sets:'3 × 10–12 reps · 60s rest', svg: SVG.squat,
+      desc:'Squat down to a low surface (cushion, folded blanket) and touch it lightly before standing. Builds confidence and teaches depth.',
+      cues:['Place target at knee height or lower','Sit back to target — don\'t just drop','Touch and stand immediately — no relaxing','Keep weight in heels and mid-foot','Lower the target as you get stronger'] },
+    { name:'Bodyweight Squat', sets:'3 × 12–15 reps · 60s rest', svg: SVG.squat,
+      desc:'The full bodyweight squat. Quads, glutes, hamstrings. Go as deep as you can while keeping your heels flat — the goal is eventually thighs past parallel.',
+      cues:['Feet shoulder-width, toes 15–30° outward','Arms forward for counterbalance','Knees track over toes — don\'t let them cave in','Deep as possible — work toward ATG (ass to grass)','Drive through whole foot on the way up'] },
+    { name:'Pause Squat', sets:'3 × 8–10 reps · 75s rest', svg: SVG.squat,
+      desc:'Squat down to the bottom position and pause for 3 seconds before standing. Builds explosive strength from the bottom and removes elastic energy.',
+      cues:['Same form as bodyweight squat','At the bottom, pause fully — no bouncing','3-second count, stay tense','Drive up explosively after the pause','Bottom position: thighs past parallel'] },
+    { name:'Bulgarian Split Squat', sets:'3 × 6–8 each leg · 90s rest', svg: SVG.lunge,
+      desc:'Rear foot on an elevated surface, front foot forward. Intense single-leg quad and glute work — the hardest bodyweight leg exercise before the pistol squat.',
+      cues:['Rear foot on couch or step, laces down','Front foot far enough forward so shin stays vertical','Lower slowly — full range of motion','Torso stays upright — don\'t hunch','Control the descent — don\'t drop'] },
+    { name:'Pistol Squat Negative', sets:'3 × 4–5 each leg · 2 min rest', svg: SVG.pistolSqNeg,
+      desc:'Lower into a pistol squat on one leg as slowly as possible, then use both legs to stand. Builds all the strength needed for the full pistol without requiring the up phase yet.',
+      cues:['Balance on one leg, other leg extended forward','Lower as slowly as you can — aim for 5–10 seconds','Go all the way to the bottom','Stand up using both legs','Focus entirely on the descent quality'] },
+    { name:'Pistol Squat', sets:'3 × 3–5 each leg · 2 min rest', svg: SVG.pistolSq,
+      desc:'The one-legged full squat. One of the most impressive bodyweight skills. Full depth, one leg, extended opposite leg — the pinnacle of lower-body calisthenics.',
+      cues:['One foot flat on floor, other leg extended forward','Arms forward for counterbalance','Deep as possible — thigh past parallel','Stand up fully — lock out the hip at top','No touching the floor with your hands'] },
+  ],
+
+  lunge: [
+    { name:'Standing Split Stance', sets:'3 × 10 each side · 45s rest', svg: SVG.lunge,
+      desc:'Simply stand in a split stance (one foot forward) and hold. Teaches balance and hip flexor length before adding movement.',
+      cues:['One foot forward, one back — shoulder-width apart','Stay tall — don\'t lean forward','Hold 30 seconds each side','Feel the stretch in your rear hip flexor','Build balance before adding movement'] },
+    { name:'Reverse Lunge', sets:'3 × 8 each leg · 60s rest', svg: SVG.lunge,
+      desc:'Step backward into the lunge. Easier on the knees than forward lunges and the best starting point for unilateral leg training.',
+      cues:['Step back onto the ball of your foot','Front shin stays vertical — knee over ankle','Lower back knee toward floor (don\'t touch)','Torso upright throughout','Drive through front heel to return'] },
+    { name:'Forward Lunge', sets:'3 × 8 each leg · 60s rest', svg: SVG.lunge,
+      desc:'Step forward into a lunge. More dynamic than reverse lunges and trains deceleration strength — crucial for athletic movement.',
+      cues:['Step forward with control — not falling forward','Front knee stays over ankle (not past toes)','Torso stays vertical','Rear knee just above floor','Step forward foot back to start between reps'] },
+    { name:'Walking Lunge', sets:'3 × 10 steps each leg · 60s rest', svg: SVG.lunge,
+      desc:'Continuous forward lunges, stepping through without returning to start. Trains coordination, balance, and hip flexor flexibility simultaneously.',
+      cues:['Continuous forward movement — no stopping','Step through fluidly, maintaining upright torso','Each stride lands heel first','Equal depth on every step','Space: 6–8 meters minimum'] },
+    { name:'Lateral Lunge', sets:'3 × 8 each side · 75s rest', svg: SVG.lunge,
+      desc:'Step out to the side and lower into a lateral squat. Trains the adductors and abductors — muscles rarely hit in standard squats.',
+      cues:['Step directly to the side — wide step','Shift weight onto that leg, sit into it','Other leg stays straight','Knee of working leg tracks over toes','Push back to centre — drive through heel'] },
+    { name:'Curtsy Lunge', sets:'3 × 8 each leg · 75s rest', svg: SVG.lunge,
+      desc:'Step behind and across your body into a crossed-leg lunge. Extreme glute medius and hip stability challenge.',
+      cues:['Step diagonally behind your standing leg','Like a curtsy — rear knee goes toward floor','Front knee stays forward — don\'t let it collapse inward','Torso stays upright and forward-facing','Return to start and alternate'] },
+    { name:'Shrimp Squat', sets:'3 × 3–5 each leg · 2 min rest', svg: SVG.pistolSqNeg,
+      desc:'One-legged squat reaching the back foot behind you with your hand. A posterior chain-dominant single leg squat that bridges the gap to pistol squats.',
+      cues:['Stand on one foot, hold the other behind you by the ankle','Lower until rear knee taps the floor','Stay upright — this is about the working leg','Use a wall for balance at first','Build depth gradually over weeks'] },
+  ],
+
+  gluteBridge: [
+    { name:'Glute Squeeze', sets:'3 × 15 reps · 45s rest', svg: SVG.glute,
+      desc:'Simply lie on your back and squeeze your glutes as hard as you can, hold, release. Activates the glutes before loading them.',
+      cues:['Lie on back, feet flat, knees bent','Squeeze glutes as hard as possible','Hold 3 seconds — feel the contraction','Release fully between reps','This is activation, not strength work'] },
+    { name:'Glute Bridge', sets:'3 × 12–15 reps · 60s rest', svg: SVG.glute,
+      desc:'Drive your hips off the floor to create a straight body line. One of the best posterior chain exercises requiring zero equipment.',
+      cues:['Feet flat, shoulder-width apart','Drive hips up — straight line hip to shoulder','Squeeze glutes hard at top — 1 second hold','Feet flat throughout (not on toes)','Lower slowly — 2–3 seconds'] },
+    { name:'Glute Bridge Hold', sets:'3 × 20–30 sec · 60s rest', svg: SVG.glute,
+      desc:'Hold the top position of the glute bridge. Builds endurance in the glutes and hamstrings and teaches how to maintain posterior pelvic tilt under load.',
+      cues:['Same as glute bridge — get to the top','Hold at the peak — glutes fully contracted','Breathe normally during the hold','If glutes cramp — good sign, reduce time slightly','Progress: longer holds over time'] },
+    { name:'Single-Leg Glute Bridge', sets:'3 × 10 each leg · 60s rest', svg: SVG.glute,
+      desc:'One leg raised, drive hips up with the other. Doubles the load on each glute and adds a core stability challenge.',
+      cues:['One foot planted, other leg extended up at 45°','Drive hips up — one leg only','Hips stay level — don\'t rotate','Squeeze glute of working side maximally','Lower slowly — control the descent'] },
+    { name:'Elevated Glute Bridge', sets:'3 × 12 reps · 60s rest', svg: SVG.glute,
+      desc:'Shoulder blades on a couch or step with feet on the floor. Greater range of motion allows deeper hip extension — significantly harder.',
+      cues:['Upper back on an elevated surface','Feet hip-width on floor, knees at 90°','Lower hips toward floor (below knee level)','Drive up to full extension — squeeze hard','Control both directions'] },
+    { name:'Nordic Curl Progression', sets:'3 × 3–5 reps · 2 min rest', svg: SVG.nordic,
+      desc:'Anchor feet under a couch, lower your torso to the floor as slowly as you can (use arms to catch yourself). Extreme hamstring eccentric strength.',
+      cues:['Kneel, feet anchored under couch','Lower your body toward floor slowly (5–8 seconds)','Arms out to catch yourself safely','Stand back up to start position using hands/arms','Over weeks: slow the eccentric more and more'] },
+    { name:'Single-Leg Nordic Prep', sets:'3 × 3 each side · 2 min rest', svg: SVG.nordic,
+      desc:'Unilateral nordic curl. One of the hardest posterior chain exercises possible — direct injury prevention and strength for advanced athletic performance.',
+      cues:['One leg anchored, other slightly raised','Lower to floor on one leg — as slow as possible','Push back using that one leg if you can','Otherwise reset and repeat','This is elite hamstring strength territory'] },
+  ],
+
+  plank: [
+    { name:'Incline Plank', sets:'3 × 20–30 sec · 45s rest', svg: SVG.plank,
+      desc:'Forearms on a raised surface (couch), body in a diagonal. Reduces bodyweight load — the easiest entry point to plank training.',
+      cues:['Forearms on elevated surface, toes on floor','One straight line from head to heels','Breathe normally — don\'t hold breath','If hips drop, rest. No compromised reps','Lower the surface height as you get stronger'] },
+    { name:'Knee Plank', sets:'3 × 20–30 sec · 45s rest', svg: SVG.plank,
+      desc:'Full plank but with knees on the floor. Builds core endurance with reduced load before going to the full version.',
+      cues:['Forearms on floor, elbows under shoulders','Knees on floor, body straight from knee to head','Core engaged — don\'t let hips sag','Look at the floor','Stop the moment form breaks'] },
+    { name:'Forearm Plank', sets:'3 × 20–40 sec · 60s rest', svg: SVG.plank,
+      desc:'The standard plank. One of the most fundamental core exercises in calisthenics. Quality over duration — a 20-second perfect plank beats a 60-second saggy one.',
+      cues:['Elbows under shoulders, forearms on floor','Straight line from head to heels','Squeeze everything: abs, glutes, quads','Breathe slowly and normally','If anything sags or rises — stop'] },
+    { name:'High Plank', sets:'3 × 30–45 sec · 60s rest', svg: SVG.highPlank,
+      desc:'Plank on straight arms (push-up position). Adds shoulder stability challenge and teaches the wrist and arm loading needed for handstands.',
+      cues:['Straight arms, hands under shoulders','Push the floor away — shoulders protrude slightly','Same rigid body as forearm plank','Don\'t lock elbows hyperextended','Look at floor'] },
+    { name:'RKC Plank', sets:'3 × 10–15 sec · 60s rest', svg: SVG.rkc,
+      desc:'The RKC (Russian Kettlebell Club) plank: contract every muscle as hard as humanly possible during the plank. Short holds with maximum tension — 10 seconds feels like a minute.',
+      cues:['Forearm plank position','Attempt to drag elbows toward toes (floor prevents this)','Simultaneously squeeze fists, glutes, quads — everything','Body temperature will rise fast','10 seconds of this = 60 seconds of normal plank'] },
+    { name:'Plank Shoulder Taps', sets:'3 × 10 each side · 75s rest', svg: SVG.highPlank,
+      desc:'High plank, then tap each shoulder with the opposite hand while maintaining a still body. Tests anti-rotation core strength.',
+      cues:['High plank position — feet slightly wider for stability','Lift one hand, tap opposite shoulder','Other hand stays firmly on floor','Hips must stay completely level — no rocking','Move slowly — quality beats speed'] },
+    { name:'Plank to Push-Up', sets:'3 × 8–10 reps · 90s rest', svg: SVG.highPlank,
+      desc:'Transition from forearm plank to high plank and back — one arm at a time. Tests full-body coordination and core stability under dynamic load.',
+      cues:['Start in forearm plank','Plant one hand, then the other — push up to high plank','Lower one forearm then the other — back to start','Alternate which arm leads each rep','Hips stay level throughout — no swaying'] },
+  ],
+
+  deadbug: [
+    { name:'Dead Bug Arms Only', sets:'3 × 8 each arm · 45s rest', svg: SVG.deadbug,
+      desc:'Just move the arms overhead while keeping back flat. Simpler starting point before adding leg movement.',
+      cues:['Lie on back, knees bent to 90° in air, arms up','Press lower back firmly into floor','Slowly lower one arm overhead','Return before switching','Lower back must not lift at any point'] },
+    { name:'Dead Bug Legs Only', sets:'3 × 8 each leg · 45s rest', svg: SVG.deadbug,
+      desc:'Just extend legs while keeping back flat. Isolates the core challenge without coordinating arms simultaneously.',
+      cues:['Lie on back, knees bent in air, hands on floor','Press lower back into floor — very important','Slowly extend one leg toward floor','Only lower as far as back stays flat','Return, switch sides'] },
+    { name:'Dead Bug', sets:'3 × 6 each side · 60s rest', svg: SVG.deadbug,
+      desc:'Opposite arm and leg extend simultaneously. One of the best core stability exercises for calisthenics — it directly builds the hollow body.',
+      cues:['Knees at 90° in air, arms pointing to ceiling','Simultaneously lower opposite arm and leg','Move slowly — 3 seconds each direction','Lower back glued to floor the whole time','Exhale fully before each rep'] },
+    { name:'Dead Bug (straight legs)', sets:'3 × 5 each side · 75s rest', svg: SVG.deadbug,
+      desc:'Same as dead bug but legs stay straight throughout. Dramatically increases the lever arm and the core demand.',
+      cues:['Start with legs straight pointing to ceiling','Lower one leg toward floor slowly','Other leg stays straight up','Back stays flat — move only in the range you can control','5cm from floor = elite'] },
+    { name:'Dead Bug with Reach', sets:'3 × 6 each side · 75s rest', svg: SVG.deadbug,
+      desc:'Both arm and leg reach as far as possible — nearly touching the floor before returning. Maximum anti-extension challenge.',
+      cues:['Arm nearly touching floor overhead','Opposite leg nearly touching floor','Hold position 2 seconds at the end range','Return slowly and controlled','Breathe out on extension, in on return'] },
+    { name:'Hollow Body Rock', sets:'3 × 10–15 sec · 60s rest', svg: SVG.hollowBody,
+      desc:'The hollow body hold converted to a gentle rocking motion. Rock forward and back like a rocking chair — the shape of the body must not change.',
+      cues:['Get into hollow body position: back pressed down, arms overhead, legs low','Initiate a gentle rock — forward and back','The entire body moves as one rigid unit','No individual segment moves independently','This is THE core skill for gymnastics/calisthenics'] },
+    { name:'Hollow Body Hold', sets:'3 × 20–30 sec · 90s rest', svg: SVG.hollowBody,
+      desc:'The static hollow body position held as long as possible. This is the master core skill — when you can hold this for 30+ seconds, your core is at an advanced level.',
+      cues:['Lie back, press lower back down firmly','Arms overhead, legs extended low (30–45cm off floor)','Shoulders slightly off floor, chin to chest','Everything tense — this is maximum core work','Lower the legs over weeks as you get stronger'] },
+  ],
+
+  lsit: [
+    { name:'Seated L-Sit Lean', sets:'3 × 15 sec · 45s rest', svg: SVG.tuckSit,
+      desc:'Sit on the floor, hands by hips, and lean forward to unload your sitting bones. Builds the wrist and shoulder strength foundation.',
+      cues:['Sit with legs extended, hands beside hips on floor','Press into floor — try to lift your hips (won\'t happen yet)','Lean slightly forward to feel the pressure','Hold the press — feel your lats engage','This primes the pattern before elevation'] },
+    { name:'Tuck L-Sit (floor)', sets:'3 × 5–10 sec · 60s rest', svg: SVG.tuckSit,
+      desc:'Tuck both knees to chest while pressing your hands into the floor. Your hips lift off the ground. The first true L-sit progression.',
+      cues:['Hands flat on floor beside hips','Press hard into floor — depress shoulders','Tuck knees toward chest as you lift','Get even 1cm of clearance — that counts','Build hold time before extending legs'] },
+    { name:'One-Leg L-Sit', sets:'3 × 5 sec each · 60s rest', svg: SVG.lSit,
+      desc:'One leg extended straight, one leg tucked. Half the leg-raise demand of the full L-sit. Great bridge progression.',
+      cues:['Press into floor, lift hips off ground','One leg extended straight (parallel to floor)','Other leg tucked — not contributing','Switch legs each set','Hold the extended leg — quad contracted, toe pointed'] },
+    { name:'L-Sit Hold', sets:'3 × 5–10 sec · 90s rest', svg: SVG.lSit,
+      desc:'Both legs extended parallel to the floor, arms straight, hips off the ground. One of the most respected static holds in calisthenics.',
+      cues:['Both legs extended — completely parallel to floor','Toes pointed, quads locked — no bent knees','Arms straight — no bending','Hips and legs completely off ground','Shoulders depressed — push the floor away'] },
+    { name:'L-Sit to V-Sit Entry', sets:'3 × 3–5 reps · 2 min rest', svg: SVG.lSit,
+      desc:'From the L-sit, attempt to raise your legs above horizontal toward a V-sit. Requires extreme hip flexor and core strength.',
+      cues:['Hold your L-sit position first','Try to pike higher — legs above 90°','This requires very strong hip flexors','Use a slight lean back to help initially','Even 10° above horizontal is progress'] },
+    { name:'V-Sit Hold', sets:'3 × 5–8 sec · 2 min rest', svg: SVG.vSit,
+      desc:'Legs raised above 90° from the floor, creating a V shape. One of the hardest static holds in floor calisthenics.',
+      cues:['Legs angled up well above horizontal','Torso stays as upright as possible','Arms straight, pressing floor away','Pointed toes, locked knees throughout','Work on this for months — it\'s a long-term goal'] },
+    { name:'Manna Progression', sets:'3 × 3–5 sec · 2 min rest', svg: SVG.vSit,
+      desc:'The manna is the most extreme floor compression skill — legs nearly overhead while seated, body near vertical. Elite gymnastics territory.',
+      cues:['From V-sit, continue pressing legs higher','Lean torso back as legs come overhead','Palms press floor, shoulders way behind hips','Eventually legs are near vertical — toes above head','This takes years of training to achieve'] },
+  ],
+
+  superman: [
+    { name:'Prone Shoulder Squeeze', sets:'3 × 10 reps · 45s rest', svg: SVG.superman,
+      desc:'Lie face down, arms by sides, and squeeze shoulder blades together without lifting. Activates the mid-back before loaded work.',
+      cues:['Lie face down, arms by sides','Squeeze shoulder blades together tightly','Hold 3 seconds — feel mid-back working','Release fully','No lifting needed here — it\'s activation only'] },
+    { name:'Superman Hold', sets:'3 × 8 reps (3 sec) · 60s rest', svg: SVG.superman,
+      desc:'Lift arms and legs simultaneously off the floor. Trains the entire posterior chain from neck to heels.',
+      cues:['Lie face down, arms extended overhead','Simultaneously lift arms, chest, and legs','Squeeze glutes — hold for 3 seconds','Lower slowly — don\'t drop','Breathe at the top'] },
+    { name:'Superman Pulses', sets:'3 × 15 reps · 60s rest', svg: SVG.superman,
+      desc:'Maintain the raised Superman position and pulse up and down a few centimetres. Builds posterior chain endurance with continuous tension.',
+      cues:['Get to Superman position','Small pulses — 5cm up and down','Stay elevated — don\'t return to floor','Continuous tension throughout','15 reps = full posterior chain burn'] },
+    { name:'Y/T/W Raise', sets:'3 × 8 each position · 60s rest', svg: SVG.superman,
+      desc:'Three variations: arms in Y shape (overhead), T shape (sides), W shape (bent elbows, hands by ears). Each hits different parts of the upper back and rear shoulder.',
+      cues:['Y: arms overhead at 30° angle from centreline','T: arms directly out to sides','W: elbows bent, raise upper arm parallel, hands by ears','Thumb up for all positions to protect shoulder','This is the best floor exercise for upper back health'] },
+    { name:'Arch Body Hold', sets:'3 × 15–20 sec · 75s rest', svg: SVG.superman,
+      desc:'The arch body hold is to the back what the hollow body is to the front. Lie face down, lift everything — hands, chest, hips, legs — and hold.',
+      cues:['Lie face down, arms overhead','Lift everything off the floor simultaneously','Max height — squeeze glutes and back hard','Hold as long as good form allows','Pairs with hollow body hold for complete core training'] },
+    { name:'Back Bridge', sets:'3 × 10–15 sec · 90s rest', svg: SVG.bridge,
+      desc:'Lie on your back, place hands by your ears and push up into a back bridge (wheel pose). Extreme spinal extension, shoulder flexibility, and wrist strength.',
+      cues:['Lie on back, hands by ears (fingers pointing toward feet)','Feet flat, knees bent','Press up onto the top of your head first (easier entry)','Then press arms straight — push the floor away','Keep pushing — the higher the hips the easier'] },
+    { name:'Back Bridge Push-Up', sets:'3 × 3–5 reps · 2 min rest', svg: SVG.bridge,
+      desc:'From a back bridge, lower the top of your head to the floor and press back up. An extreme gymnastic movement requiring exceptional spinal mobility.',
+      cues:['Start in full back bridge','Bend elbows slowly — head lowers toward floor','Touch crown of head lightly','Press back up fully','This is a multi-year training goal — not to rush'] },
+  ],
+
+  scapular: [
+    { name:'Wall Angels', sets:'3 × 10 reps · 45s rest', svg: SVG.wallAngel,
+      desc:'Stand against a wall, arms in goalpost position, slide them overhead and back down. Trains scapular mobility and thoracic extension simultaneously.',
+      cues:['Back flat against wall, elbows and wrists touching wall','Slide arms up the wall to overhead position','Keep contact throughout — don\'t let elbows or wrists lose the wall','Return slowly to start','This is harder than it sounds — limited range is normal at first'] },
+    { name:'Prone Floor Angel', sets:'3 × 10 reps · 45s rest', svg: SVG.scapular,
+      desc:'Lie face down, arms out to sides, sweep them overhead and back. Trains scapular movement against gravity — every part of the range feels different.',
+      cues:['Lie face down, arms in T position (out to sides)','Lift hands slightly off floor','Sweep arms overhead to Y position','Sweep back to T, then down to sides','Keep hands lifted the entire time'] },
+    { name:'Scapular Push-Up', sets:'3 × 10–12 reps · 60s rest', svg: SVG.scapular,
+      desc:'In a plank position, move only your shoulder blades — no elbow bending. Trains the serratus anterior and protraction/retraction strength essential for pulling.',
+      cues:['Straight-arm plank — elbows stay locked throughout','Squeeze shoulder blades together (chest drops slightly)','Push shoulder blades apart (mid-back rounds slightly)','Arms stay straight throughout — no bend','This is tiny movement but powerful isolation'] },
+    { name:'Prone Row', sets:'3 × 10 reps · 60s rest', svg: SVG.proneRow,
+      desc:'Lie face down, arms extended forward. Pull elbows back past your hips while lifting hands off the floor. The floor substitute for a dumbbell row.',
+      cues:['Lie face down, arms extended overhead','Lift hands off floor','Pull elbows back toward hips — squeeze lats','Pause at end range — shoulder blades pinched','Return forward slowly — don\'t just drop arms'] },
+    { name:'Plank Reach-Through', sets:'3 × 8 each side · 75s rest', svg: SVG.scapular,
+      desc:'High plank, reach one arm under your body across to the other side. Trains thoracic rotation and scapular stability under load.',
+      cues:['High plank — feet wider for stability','Lift one hand, thread it under body, reaching to opposite side','Rotate thorax (mid-back) — hips stay forward','Return through the same path','Slow and controlled — feel the rotation'] },
+    { name:'Pseudo Planche Lean', sets:'3 × 15–20 sec · 90s rest', svg: SVG.pseudoPlanche,
+      desc:'In a push-up position, lean your body forward over your hands. Arms stay straight. This loads the shoulders and serratus exactly as needed for planche training.',
+      cues:['High plank position — arms straight','Lean entire body forward over hands (feet same place)','Arms stay locked straight','Hands slightly behind hips when leaned far','This is planche training — take months to build lean angle'] },
+    { name:'Tuck Planche', sets:'3 × 5–8 sec · 2 min rest', svg: SVG.tuckedPlanche,
+      desc:'From the pseudo planche lean, tuck both knees to chest and press your hips level. One of the hardest floor skills — you are supporting your full bodyweight with arms alone, horizontal.',
+      cues:['From deep pseudo-planche lean, bend knees toward chest','Press body as horizontal as possible','Arms locked straight — push floor away','Protract (round forward) your shoulders','Hold as long as form allows — even 2 seconds is success'] },
+  ],
+
+  handstand: [
+    { name:'Wrist Warm-Up', sets:'2 × 10 each direction · 30s rest', svg: SVG.wrist,
+      desc:'Always perform wrist circles, extensions, and flexion before any handstand work. Your wrists are the foundation and the most injury-prone joint.',
+      cues:['Forward wrist circles: 10 each hand','Backward wrist circles: 10 each','Wrist rocks forward on knuckles: 10 reps','Palm-down press stretches: hold 20 sec each','Do this every single session'] },
+    { name:'Crow Pose Hold', sets:'3 × 5–10 sec · 90s rest', svg: SVG.tuckedPlanche,
+      desc:'Balance on your hands with knees resting on your triceps — the yoga "crow." Teaches fundamental hand balancing and mental comfort with weight over hands.',
+      cues:['Squat down, hands on floor shoulder-width','Bend elbows slightly — knees rest on triceps','Lean forward — shift weight to hands','Lift feet off floor — both feet up','Look at floor slightly forward of hands (not between hands)'] },
+    { name:'Headstand', sets:'3 × 15–30 sec · 90s rest', svg: SVG.inversion,
+      desc:'Balance on your head and two hands. Safely builds inversion tolerance and begins to teach the tension patterns needed for handstands.',
+      cues:['Tripod base: head and hands form triangle','Walk feet up or kick up lightly','Straight arms are harder — bent arms are fine here','Full body tension — squeeze everything','Breathe! Most people hold their breath — don\'t'] },
+    { name:'Wall Handstand (back to wall)', sets:'3 × 20–30 sec · 90s rest', svg: SVG.handstand,
+      desc:'Kick up facing away from the wall. Builds handstand endurance and gets you comfortable inverted for extended periods.',
+      cues:['Stand arm\'s length from wall','Kick up one leg at a time','Arms locked — push the floor away','Belly faces out, back to wall','Breathe slowly — relax as much as tension allows'] },
+    { name:'Chest-to-Wall Handstand', sets:'3 × 20–30 sec · 2 min rest', svg: SVG.handstand,
+      desc:'Hands close to wall, belly facing wall. Forces the correct hollow body handstand shape. The most important handstand drill.',
+      cues:['Walk feet up wall — hands 5–15cm from wall','Hollow body: slight posterior tilt, no banana back','Push floor away — shoulders fully protracted','Shift weight between fingertips and heel of palm','Work on touching the wall with one foot, then neither'] },
+    { name:'Freestanding Handstand Kick-Up', sets:'10 kick-up attempts · 2 min rest', svg: SVG.handstand,
+      desc:'Practice kicking up to the freestanding handstand. The goal is a controlled, not explosive, kick. Landing in balance is the skill.',
+      cues:['Lunge position — kick-up leg back','Place hands down, kick rear leg up','Front leg follows to vertical','Both legs meet at top — don\'t overshoot','Use a wall to catch overshoots initially'] },
+    { name:'Freestanding Handstand Hold', sets:'3 × max balance · 2 min rest', svg: SVG.handstand,
+      desc:'The freestanding handstand. Balance is maintained through constant micro-adjustments at the wrist. This is the ultimate floor pressing skill.',
+      cues:['Fingertips press to correct forward lean','Wrist extension corrects backward lean','Legs and hips move as counterbalance (initially)','Goal: completely still hold for 10+ seconds','30 seconds is true mastery'] },
+  ],
+
+  burpee: [
+    { name:'Squat Thrust', sets:'3 × 6–8 reps · 75s rest', svg: SVG.burpee,
+      desc:'From standing, squat down, place hands, jump feet back to plank, jump feet back in, stand. The burpee without any push-up or jump.',
+      cues:['Stand tall, then squat and place hands','Jump both feet back to plank position at once','Jump feet back in between hands','Stand up — no jump at the top','Keep core braced when you hit the plank'] },
+    { name:'Slow Burpee', sets:'3 × 5 reps · 90s rest', svg: SVG.burpee,
+      desc:'Every phase of the burpee done deliberately with a 4-second transition. Total body control, not cardio.',
+      cues:['Stand → squat → hands down → walk (not jump) feet to plank','Optional one push-up','Walk feet back → stand (no jump)','4 seconds per transition — no rushing','Focus on smooth transitions, perfect form'] },
+    { name:'Standard Burpee', sets:'3 × 8 reps · 90s rest', svg: SVG.burpee,
+      desc:'The classic burpee with jump at the top. Full-body conditioning that blends push-up, plank, and explosive standing jump.',
+      cues:['Squat, hands down, feet jump back to plank','Perform a push-up','Jump feet back in','Jump up and clap overhead','Land softly — bent knees on landing'] },
+    { name:'Burpee + Push-Up', sets:'3 × 6 reps · 90s rest', svg: SVG.burpee,
+      desc:'Every burpee includes a full push-up at the bottom. Adds significant upper body work to the standard burpee.',
+      cues:['Full chest-to-floor push-up at bottom of each burpee','Maintain plank quality during the push-up','Don\'t rush the push-up to get back up','Strong, sharp jump at the top','One full push-up per rep — no half reps'] },
+    { name:'Burpee + Tuck Jump', sets:'3 × 6 reps · 2 min rest', svg: SVG.burpee,
+      desc:'Instead of a standard jump at the top, perform a tuck jump — knees to chest in mid-air. Much more explosive power required.',
+      cues:['Everything same as standard burpee','At the jump: drive both knees to chest at peak','Land softly on balls of feet, absorb through knees','Tuck must be at peak height — not on the way down','Quality tucks only — half-tucks don\'t count'] },
+    { name:'Burpee Box Jump', sets:'3 × 5 reps · 2 min rest', svg: SVG.burpee,
+      desc:'After the plank and push-up, jump explosively onto a raised surface. Combines strength, power, and coordination.',
+      cues:['Use a sturdy surface 30–50cm high','Full burpee, then explosive jump onto surface','Land in squat position on the box','Step down — don\'t jump down for safety','Surface height: start low, build up'] },
+    { name:'One-Arm Burpee', sets:'3 × 3 each arm · 2 min rest', svg: SVG.oneArmPushup,
+      desc:'The entire burpee performed with one arm — including the push-up and the plank hold. Elite total body strength and coordination.',
+      cues:['One hand centred under chest throughout','Plank, push-up, and jump all one-armed','Other arm stays behind back or extended for balance','Feet wide for stability','This is a multi-month progression to achieve'] },
+  ],
+
+  mountainClimber: [
+    { name:'High Plank Hold', sets:'3 × 20–30 sec · 60s rest', svg: SVG.mountainClimber,
+      desc:'Just hold the high plank (push-up top position) with perfect form. Builds the shoulder stability needed before adding movement.',
+      cues:['Straight arms, hands under shoulders','Push floor away — don\'t sink between shoulder blades','Straight line head to heels','Breathe normally throughout','Stop if form degrades'] },
+    { name:'Slow Mountain Climber', sets:'3 × 8 each leg · 60s rest', svg: SVG.mountainClimber,
+      desc:'Drive one knee toward chest in the plank position, hold for 2 seconds, return. Deliberate and slow — core training, not cardio.',
+      cues:['High plank — body in plank alignment','Drive one knee toward chest — slow (2 seconds in)','Hold at chest — core very tight','Return slowly (2 seconds out)','Hips stay level — no rotation or piking'] },
+    { name:'Mountain Climber', sets:'3 × 10 each leg · 60s rest', svg: SVG.mountainClimber,
+      desc:'Alternating knee drives in the plank position at a controlled tempo. Core stability under dynamic movement — a full-body conditioning drill.',
+      cues:['High plank throughout','Alternate knee drives at a controlled pace','Hips level — no bobbing up and down','Breathe rhythmically — don\'t hold breath','Full extension of back leg between each drive'] },
+    { name:'Cross-Body Mountain Climber', sets:'3 × 8 each side · 75s rest', svg: SVG.mountainClimber,
+      desc:'Drive each knee toward the opposite elbow. Trains rotational core strength and the obliques in addition to the standard anti-extension.',
+      cues:['High plank — wide feet for stability','Drive right knee toward left elbow','Rotate torso slightly — this is intentional','Return fully before switching sides','Keep hips low — don\'t pike to help the rotation'] },
+    { name:'Mountain Climber Sprint', sets:'3 × 20 sec all-out · 90s rest', svg: SVG.mountainClimber,
+      desc:'20 seconds of maximum speed mountain climbers. Pure conditioning — heart rate will spike dramatically. Return to slow sets if form breaks.',
+      cues:['Full commitment — maximum speed for 20 seconds','Hips MUST stay level — no exception','If hips pike up, slow down','Arms stay locked throughout','These 20 seconds should feel very hard'] },
+    { name:'Spiderman Crawl', sets:'3 × 8 meters · 90s rest', svg: SVG.mountainClimber,
+      desc:'Crawl forward in a push-up position — each step brings the knee to the outside elbow. Hip mobility, shoulder stability, and coordination combined.',
+      cues:['High plank — move forward like a lizard','Right hand forward + right knee to right elbow simultaneously','Then left side — right elbow drops to floor','Slow and deliberate — long stride length','This is gymnastic movement quality training'] },
+    { name:'Dragon Flag', sets:'3 × 3–5 reps · 2 min rest', svg: SVG.hollowBody,
+      desc:'The most advanced floor core exercise. Lie on your back, grab a fixed point (couch leg), and lower your stiff-bodied plank position toward the floor and back up.',
+      cues:['Lie on back, grip couch legs or fixed anchor overhead','Lift body to vertical (legs straight up)','Lower as one stiff unit — body stays rigid','Go as low as possible before returning','This is Bruce Lee\'s signature move — takes months to master'] },
+  ],
+
+  bearCrawl: [
+    { name:'Bear Crawl Position Hold', sets:'3 × 15–20 sec · 45s rest', svg: SVG.bearCrawl,
+      desc:'Simply hold the bear crawl position (all fours, knees hovering 2cm) without moving. Just the hold is very challenging for the core.',
+      cues:['Hands under shoulders, knees under hips','Lift knees 2–3cm off the floor','Back flat — like balancing a glass of water','Breathe normally — don\'t hold breath','If knees touch floor, that\'s fine — reset and hold again'] },
+    { name:'Bear Crawl Forward', sets:'3 × 5 meters · 60s rest', svg: SVG.bearCrawl,
+      desc:'Move forward in the bear position — opposite hand and foot move together. Coordination challenge with serious core demand.',
+      cues:['Move right hand + left foot simultaneously','Then left hand + right foot','Move slowly — no rushing','Back stays flat throughout','Short distance done well beats long distance done poorly'] },
+    { name:'Bear Crawl (forward & back)', sets:'3 × 8 meters total · 60s rest', svg: SVG.bearCrawl,
+      desc:'Forward for 4 meters, then reverse back to start. Reversing requires recalibrating the coordination pattern — harder than it sounds.',
+      cues:['Forward: right hand + left foot first','Reverse: reverse the pattern (left foot back, right hand back)','Maintain height — knees always hovering','Smooth rhythm — not fast but not robotic','Look at floor 30cm ahead of hands'] },
+    { name:'Lateral Bear Crawl', sets:'3 × 5 steps each side · 75s rest', svg: SVG.bearCrawl,
+      desc:'Crawl sideways. Move the leading hand and foot out, then bring the trailing limbs to follow. Completely different coordination challenge.',
+      cues:['Step leading hand and foot out to one side','Bring trailing hand and foot to close the gap','Stay in the hover position throughout','Do full sets in one direction, then reverse','Hips stay level — resist the temptation to twist'] },
+    { name:'Bear Crawl Push-Up', sets:'3 × 3 each side · 90s rest', svg: SVG.bearCrawl,
+      desc:'Crawl a step, then do a push-up. Crawl, push-up. Combines moving stability with pressing strength.',
+      cues:['One bear crawl step forward','Stop — perform one full push-up','Crawl another step forward','Push-up again','Maintain bear hover height between push-ups'] },
+    { name:'Crab Walk', sets:'3 × 6 meters · 90s rest', svg: SVG.crabWalk,
+      desc:'Sit on floor, hands behind, lift hips, walk forward in a tabletop position. Trains posterior shoulder, triceps, and hip extension under load.',
+      cues:['Hands behind, fingers toward feet, hips lifted','Walk hands and feet simultaneously','Hips must stay elevated throughout — no sagging','Look at ceiling, not at feet','Full arms — don\'t let elbows bend excessively'] },
+    { name:'Frog Jump Sequence', sets:'3 × 6 jumps · 2 min rest', svg: SVG.squat,
+      desc:'From a deep squat, explosively jump forward landing back in a deep squat. Combines explosive hip extension, landing mechanics, and squat depth.',
+      cues:['Start in deep squat position','Explode forward and up — full hip and knee extension','Land silently back in deep squat','Immediately load for next jump','Land softly — absorb through hips, knees, ankles'] },
+  ],
+
+  towelRow: [
+    { name:'Towel Doorframe Row (body upright)', sets:'3 × 10–12 reps · 60s rest', svg: SVG.proneRow,
+      desc:'Loop a towel around a door handle at waist height. Lean back slightly, walk feet forward, and pull your chest to the door. The most upright and easiest angle.',
+      cues:['Grip towel ends, walk feet toward door','Body at ~60–70° from floor — mostly upright','Pull elbows back — squeeze shoulder blades','Chest comes to door handle','Lower slowly — don\'t just fall back'] },
+    { name:'Towel Row (body angled)', sets:'3 × 8–10 reps · 60s rest', svg: SVG.proneRow,
+      desc:'Walk feet further forward, increasing the lean angle. More bodyweight transferred to the pull — significantly harder than the upright version.',
+      cues:['Feet further from door than upright version','Body at ~45° from floor','Straight body — don\'t bend at hips to cheat','Pull chest to door handle each rep','Lower under control — 2–3 seconds'] },
+    { name:'Towel Row (body near horizontal)', sets:'3 × 6–8 reps · 75s rest', svg: SVG.proneRow,
+      desc:'Walk feet as far forward as possible — body nearly parallel to the floor. Approaches the difficulty of an inverted row on bars.',
+      cues:['Feet almost under the door','Body as horizontal as possible','Heels only on floor — rest of body suspended','Pull powerfully — chest to handle','Full lockout at the bottom — arms straight'] },
+    { name:'Towel Row + Hold', sets:'3 × 6 reps (2 sec hold) · 75s rest', svg: SVG.proneRow,
+      desc:'Same as angled row but pause for 2 seconds at the top with shoulder blades pinched. Builds the static strength and body awareness of the full pull.',
+      cues:['Row to the top','Pause 2 seconds — squeeze lats and mid-back hard','Feel the difference between this and rushing','Lower slowly','The hold is the hardest part — don\'t cut it short'] },
+    { name:'Single-Arm Towel Row', sets:'3 × 5 each arm · 90s rest', svg: SVG.proneRow,
+      desc:'One hand on towel, body angled. Doubles the load on one side and adds a rotational anti-twist core challenge.',
+      cues:['One-hand grip on towel','Opposite arm extended for balance','Keep hips square — don\'t rotate to help','Pull elbow back past your side','Start with easier body angle, progress to harder'] },
+    { name:'Typewriter Row', sets:'3 × 4 each side · 90s rest', svg: SVG.proneRow,
+      desc:'Row to the top, then slide laterally to one side before lowering. Trains unilateral lat strength and scapular control under load.',
+      cues:['Pull to the top with both hands','At the top, shift weight to one arm','Slide sideways — one arm extends, other keeps bent','Lower from that position','Alternate direction each rep'] },
+    { name:'Feet-Elevated Towel Row', sets:'3 × 5–6 reps · 2 min rest', svg: SVG.proneRow,
+      desc:'Feet on a raised surface (couch, step), body near horizontal. Centre of mass shifts further — approaches full bodyweight pull. The hardest towel row variation.',
+      cues:['Feet elevated on couch or step','Body completely horizontal — no sag at hips','Grip towel tightly — control is critical','Full range pull — chest to door','This is very close to a proper inverted row — treat it with respect'] },
+  ],
+};
+
+// ══════════════════════════════════════════════════════════
+// SCHEDULE: which progressions appear on which days
+// Format: [progressionKey, slotNumber]
+// ══════════════════════════════════════════════════════════
+
+const SCHEDULE = {
+  mon: ['pushup','pike','tricepDip'],
+  tue: ['squat','lunge','gluteBridge'],
+  wed: ['plank','deadbug','lsit'],
+  thu: ['scapular','superman','handstand','towelRow'],
+  fri: ['burpee','mountainClimber','bearCrawl'],
+};
+
+// ══════════════════════════════════════════════════════════
+// STATE: read/write from localStorage
+// ══════════════════════════════════════════════════════════
+
+function getLevel(key) {
+  try { return parseInt(localStorage.getItem('lvl_'+key)||'0',10); } catch(e) { return 0; }
+}
+function setLevel(key, val) {
+  try { localStorage.setItem('lvl_'+key, val); } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════
+
+function renderSlot(containerEl, progKey, slotIndex) {
+  const levels = PROGRESSIONS[progKey];
+  const lvl = Math.min(getLevel(progKey), levels.length-1);
+  const ex = levels[lvl];
+  const total = levels.length;
+
+  // Build dot HTML
+  let dots = '';
+  for (let i=0;i<total;i++) {
+    dots += `<div class="prog-dot${i===lvl?' active':''}"></div>`;
+  }
+
+  const html = `
+  <div class="prog-block" id="block-${progKey}">
+    <div class="prog-header">
+      <div class="prog-slot-num">EXERCISE ${slotIndex+1}</div>
+      <div class="prog-level-counter">
+        <span style="color:var(--text)">${lvl+1}/${total}</span>
+        <div class="prog-dots">${dots}</div>
+      </div>
+    </div>
+    <div class="prog-card" id="card-${progKey}" data-key="${progKey}">
+      <div class="level-ribbon ${LEVEL_CLASSES[Math.min(lvl,6)]}">${LEVEL_NAMES[Math.min(lvl,6)]}</div>
+      <div class="prog-face" onclick="toggleCard('${progKey}')">
+        <div class="prog-num">0${slotIndex+1}</div>
+        <div class="prog-info">
+          <div class="prog-name" id="name-${progKey}">${ex.name}</div>
+          <div class="prog-sets" id="sets-${progKey}">${ex.sets}</div>
+        </div>
+        <div class="prog-toggle">+</div>
+      </div>
+      <div class="prog-body" id="body-${progKey}">
+        <div class="ex-svg" id="svg-${progKey}">${ex.svg}</div>
+        <p class="ex-desc" id="desc-${progKey}">${ex.desc}</p>
+        <div class="ex-cues">
+          <div class="cue-title">KEY FORM CUES</div>
+          <div id="cues-${progKey}">${ex.cues.map(c=>`<div class="cue">${c}</div>`).join('')}</div>
+        </div>
+        <div class="swipe-controls">
+          <button class="swipe-btn easier" onclick="changeLevel('${progKey}',-1,event)" id="easier-${progKey}" ${lvl===0?'disabled':''}>
+            ← Easier
+          </button>
+          <button class="swipe-btn harder" onclick="changeLevel('${progKey}',1,event)" id="harder-${progKey}" ${lvl===total-1?'disabled':''}>
+            Harder →
+          </button>
+        </div>
+        <div class="rest-timer-wrap">
+          <button class="rest-timer-btn" id="timer-btn-${progKey}" onclick="startRestTimer('${progKey}')">⏱ Start Rest Timer</button>
+          <div class="rest-timer-display" id="timer-display-${progKey}">
+            <div class="rest-timer-ring">
+              <svg viewBox="0 0 64 64" width="64" height="64">
+                <circle class="ring-bg" cx="32" cy="32" r="28"/>
+                <circle class="ring-fill" id="timer-ring-${progKey}" cx="32" cy="32" r="28" stroke-dasharray="175.9" stroke-dashoffset="0"/>
+              </svg>
+              <div class="rest-timer-num" id="timer-num-${progKey}">—</div>
+            </div>
+            <div class="rest-timer-info">
+              <div class="rest-timer-label" id="timer-label-${progKey}">Rest</div>
+              <button class="rest-timer-skip" onclick="skipRestTimer('${progKey}')">Skip →</button>
+            </div>
+          </div>
+        </div>
+        <div class="swipe-hint">Swipe card left/right or use buttons to change difficulty</div>
+      </div>
+    </div>
+  </div>`;
+
+  containerEl.innerHTML = html;
+
+  // Attach swipe listener
+  attachSwipe(progKey);
+}
+
+function toggleCard(key) {
+  const card = document.getElementById('card-'+key);
+  card.classList.toggle('expanded');
+  if (card.classList.contains('expanded')) {
+    // auto-scroll card into view
+    setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+  }
+}
+
+function changeLevel(key, delta, e) {
+  if (e) { e.stopPropagation(); }
+  const levels = PROGRESSIONS[key];
+  let lvl = getLevel(key);
+  const newLvl = Math.max(0, Math.min(levels.length-1, lvl+delta));
+  if (newLvl === lvl) return;
+
+  const body = document.getElementById('body-'+key);
+  const animClass = delta > 0 ? 'anim-out-left' : 'anim-out-right';
+  const inClass   = delta > 0 ? 'anim-in-right' : 'anim-in-left';
+
+  // Animate out
+  body.classList.add(animClass);
+  setTimeout(()=>{
+    body.classList.remove(animClass);
+    setLevel(key, newLvl);
+    updateCardContent(key, newLvl);
+    body.classList.add(inClass);
+    setTimeout(()=>body.classList.remove(inClass), 200);
+  }, 160);
+}
+
+function updateCardContent(key, lvl) {
+  const levels = PROGRESSIONS[key];
+  const ex = levels[lvl];
+  const total = levels.length;
+
+  document.getElementById('name-'+key).textContent = ex.name;
+  document.getElementById('sets-'+key).textContent = ex.sets;
+  document.getElementById('svg-'+key).innerHTML = ex.svg;
+  document.getElementById('desc-'+key).textContent = ex.desc;
+  document.getElementById('cues-'+key).innerHTML = ex.cues.map(c=>`<div class="cue">${c}</div>`).join('');
+
+  // buttons
+  document.getElementById('easier-'+key).disabled = lvl === 0;
+  document.getElementById('harder-'+key).disabled = lvl === total-1;
+
+  // ribbon
+  const card = document.getElementById('card-'+key);
+  const ribbon = card.querySelector('.level-ribbon');
+  ribbon.className = 'level-ribbon '+LEVEL_CLASSES[Math.min(lvl,6)];
+  ribbon.textContent = LEVEL_NAMES[Math.min(lvl,6)];
+
+  // dots
+  const block = document.getElementById('block-'+key);
+  const dots = block.querySelectorAll('.prog-dot');
+  dots.forEach((d,i)=>d.classList.toggle('active',i===lvl));
+  block.querySelector('.prog-level-counter span').textContent = `${lvl+1}/${total}`;
+
+  // refresh progress summary if open
+  const ps = document.getElementById('progressSummary');
+  if (ps && ps.classList.contains('open')) renderProgressSummary();
+}
+
+function attachSwipe(key) {
+  const card = document.getElementById('card-'+key);
+  let startX = 0, startY = 0, moved = false;
+
+  card.addEventListener('touchstart', e=>{
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    moved = false;
+  }, {passive:true});
+
+  card.addEventListener('touchmove', e=>{
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) moved = true;
+  }, {passive:true});
+
+  card.addEventListener('touchend', e=>{
+    if (!moved) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) {
+      // Only act if card is expanded
+      if (document.getElementById('card-'+key).classList.contains('expanded')) {
+        changeLevel(key, dx < 0 ? 1 : -1, null);
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// WARM-UP TOGGLE
+// ══════════════════════════════════════════════════════════
+function toggleWarmup(day) {
+  const block = document.getElementById('warmup-' + day);
+  if (block) block.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════════════════
+// WORKOUT COMPLETION & STREAK
+// ══════════════════════════════════════════════════════════
+const WORKOUT_DAYS = ['mon','tue','wed','thu','fri'];
+
+function getTodayDateStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+
+function getWeekKey() {
+  // Returns ISO week start (Monday) as YYYY-MM-DD
+  const d = new Date();
+  const day = d.getDay(); // 0=Sun
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(d.setDate(diff));
+  return `${mon.getFullYear()}-${mon.getMonth()+1}-${mon.getDate()}`;
+}
+
+function getDoneKey(dayKey) {
+  return `done_${getWeekKey()}_${dayKey}`;
+}
+
+function isDone(dayKey) {
+  try { return localStorage.getItem(getDoneKey(dayKey)) === '1'; } catch(e) { return false; }
+}
+
+function markDone(dayKey) {
+  const already = isDone(dayKey);
+  try {
+    if (already) {
+      localStorage.removeItem(getDoneKey(dayKey));
+    } else {
+      localStorage.setItem(getDoneKey(dayKey), '1');
+    }
+  } catch(e) {}
+  updateCompleteBtn(dayKey);
+  renderStreakBanner();
+  renderProgressSummary();
+}
+
+function updateCompleteBtn(dayKey) {
+  const btn = document.getElementById('complete-' + dayKey);
+  const icon = document.getElementById('complete-' + dayKey + '-icon');
+  if (!btn) return;
+  if (isDone(dayKey)) {
+    btn.classList.add('done');
+    btn.innerHTML = '✅ Workout Complete!';
+  } else {
+    btn.classList.remove('done');
+    btn.innerHTML = '<span>✓</span> Mark Workout Complete';
+  }
+}
+
+function restoreCompletionButtons() {
+  WORKOUT_DAYS.forEach(day => updateCompleteBtn(day));
+}
+
+function calcStreak() {
+  // Count consecutive days done going backward from today
+  const dayMap = {0:'sun',1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat'};
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const wday = dayMap[d.getDay()];
+    if (!WORKOUT_DAYS.includes(wday)) { streak++; continue; } // rest day counts
+    const weekStart = new Date(d);
+    const wd = d.getDay();
+    const diff = d.getDate() - wd + (wd === 0 ? -6 : 1);
+    weekStart.setDate(diff);
+    const wk = `${weekStart.getFullYear()}-${weekStart.getMonth()+1}-${weekStart.getDate()}`;
+    const key = `done_${wk}_${wday}`;
+    let done = false;
+    try { done = localStorage.getItem(key) === '1'; } catch(e) {}
+    if (done) { streak++; } else { break; }
+  }
+  return streak;
+}
+
+function renderStreakBanner() {
+  const streak = calcStreak();
+  document.getElementById('streakNum').textContent = streak;
+
+  const dayLabels = ['M','T','W','T','F'];
+  const dayKeys = ['mon','tue','wed','thu','fri'];
+  const dayMap = {0:'sun',1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat'};
+  const todayKey = dayMap[new Date().getDay()];
+
+  let html = '';
+  dayKeys.forEach((key, i) => {
+    const done = isDone(key);
+    const isToday = key === todayKey;
+    let cls = 'streak-day-dot';
+    if (done) cls += ' done';
+    if (isToday) cls += ' today';
+    const icon = done ? '✓' : dayLabels[i];
+    html += `<div class="${cls}" title="${key}"><div class="dot-check">${icon}</div></div>`;
+  });
+  document.getElementById('streakDots').innerHTML = html;
+  // Update fire emoji
+  document.querySelector('.streak-fire').textContent = streak >= 3 ? '🔥' : streak >= 1 ? '✨' : '💤';
+}
+
+// ══════════════════════════════════════════════════════════
+// PROGRESS SUMMARY
+// ══════════════════════════════════════════════════════════
+const PROG_DISPLAY_NAMES = {
+  pushup: 'Push-Up', pike: 'Pike / Handstand', tricepDip: 'Tricep Dip',
+  squat: 'Squat', lunge: 'Lunge', gluteBridge: 'Glute Bridge',
+  plank: 'Plank', deadbug: 'Dead Bug', lsit: 'L-Sit',
+  scapular: 'Scapular', superman: 'Superman', handstand: 'Handstand',
+  burpee: 'Burpee', mountainClimber: 'Mtn Climber', bearCrawl: 'Bear Crawl',
+  towelRow: 'Towel Row'
+};
+
+function renderProgressSummary() {
+  const grid = document.getElementById('progressGrid');
+  if (!grid) return;
+  let html = '';
+  Object.entries(PROGRESSIONS).forEach(([key, levels]) => {
+    const lvl = Math.min(getLevel(key), levels.length - 1);
+    const total = levels.length;
+    const pct = Math.round((lvl / (total - 1)) * 100);
+    const name = PROG_DISPLAY_NAMES[key] || key;
+    html += `
+      <div class="progress-item">
+        <div class="progress-item-name">${name}</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+        <div class="progress-item-level">LV ${lvl+1} / ${total} · ${LEVEL_NAMES[Math.min(lvl,6)]}</div>
+      </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function toggleProgressSummary() {
+  const el = document.getElementById('progressSummary');
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) renderProgressSummary();
+}
+
+
+
+// ══════════════════════════════════════════════════════════
+// REST TIMER
+// ══════════════════════════════════════════════════════════
+const activeTimers = {};
+
+function getRestSeconds(key) {
+  const lvl = getLevel(key);
+  const ex = PROGRESSIONS[key] && PROGRESSIONS[key][lvl];
+  if (!ex) return 60;
+  const match = ex.sets.match(/(\d+)\s*min/);
+  if (match) return parseInt(match[1]) * 60;
+  const secMatch = ex.sets.match(/(\d+)s\s*rest/);
+  if (secMatch) return parseInt(secMatch[1]);
+  return 60;
+}
+
+function startRestTimer(key) {
+  if (activeTimers[key]) {
+    skipRestTimer(key);
+    return;
+  }
+  const secs = getRestSeconds(key);
+  const btn = document.getElementById('timer-btn-' + key);
+  const display = document.getElementById('timer-display-' + key);
+  const numEl = document.getElementById('timer-num-' + key);
+  const ringEl = document.getElementById('timer-ring-' + key);
+  const labelEl = document.getElementById('timer-label-' + key);
+  const circumference = 175.9;
+
+  display.classList.add('visible');
+  btn.classList.add('running');
+  btn.textContent = '⏹ Cancel Timer';
+
+  let remaining = secs;
+  function tick() {
+    numEl.textContent = remaining;
+    const progress = remaining / secs;
+    ringEl.style.strokeDashoffset = circumference * (1 - progress);
+    ringEl.classList.toggle('urgent', remaining <= 5);
+    labelEl.textContent = remaining <= 5 ? 'Go!' : 'Resting…';
+    if (remaining <= 0) {
+      clearInterval(activeTimers[key]);
+      delete activeTimers[key];
+      btn.classList.remove('running');
+      btn.classList.add('done-flash');
+      btn.textContent = '✓ Rest Complete';
+      numEl.textContent = '✓';
+      labelEl.textContent = 'Done!';
+      setTimeout(() => {
+        btn.classList.remove('done-flash');
+        btn.textContent = '⏱ Start Rest Timer';
+        display.classList.remove('visible');
+        ringEl.style.strokeDashoffset = 0;
+      }, 2000);
+      return;
+    }
+    remaining--;
+  }
+  tick();
+  activeTimers[key] = setInterval(tick, 1000);
+}
+
+function skipRestTimer(key) {
+  if (activeTimers[key]) {
+    clearInterval(activeTimers[key]);
+    delete activeTimers[key];
+  }
+  const btn = document.getElementById('timer-btn-' + key);
+  const display = document.getElementById('timer-display-' + key);
+  const ringEl = document.getElementById('timer-ring-' + key);
+  if (btn) {
+    btn.classList.remove('running', 'done-flash');
+    btn.textContent = '⏱ Start Rest Timer';
+  }
+  if (display) display.classList.remove('visible');
+  if (ringEl) ringEl.style.strokeDashoffset = 0;
+}
+
+// ══════════════════════════════════════════════════════════
+// MOBILITY CHECKBOXES
+// ══════════════════════════════════════════════════════════
+function toggleMobility(el) {
+  el.classList.toggle('checked');
+  const check = el.querySelector('.mob-check');
+  check.textContent = el.classList.contains('checked') ? '✓' : '';
+  updateMobilityProgress();
+}
+
+function updateMobilityProgress() {
+  const items = document.querySelectorAll('#mobilityList .mobility-item');
+  const done = document.querySelectorAll('#mobilityList .mobility-item.checked').length;
+  const total = items.length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const fill = document.getElementById('mobProgressFill');
+  const label = document.getElementById('mobProgressLabel');
+  if (fill) fill.style.width = pct + '%';
+  if (label) label.textContent = done + ' / ' + total;
+}
+
+// ══════════════════════════════════════════════════════════
+// RESET ALL PROGRESS
+// ══════════════════════════════════════════════════════════
+function resetAllProgress() {
+  if (!confirm('Reset all exercise levels back to Level 1? This cannot be undone.')) return;
+  try {
+    Object.keys(PROGRESSIONS).forEach(key => localStorage.removeItem('lvl_' + key));
+  } catch(e) {}
+  // Re-render all slots
+  Object.entries(SCHEDULE).forEach(([day, keys]) => {
+    keys.forEach((key, idx) => {
+      const el = document.getElementById(`${day}-slot-${idx}`);
+      if (el) renderSlot(el, key, idx);
+    });
+  });
+  renderProgressSummary();
+}
+
+function init() {
+  // Mark today's tab
+  const dayMap = {0:'sun',1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat'};
+  const todayKey = dayMap[new Date().getDay()];
+  document.querySelectorAll('.day-tab').forEach((tab, i) => {
+    const keys = ['mon','tue','wed','thu','fri','sat','sun'];
+    if (keys[i] === todayKey) {
+      tab.classList.add('today-tab');
+    }
+  });
+
+  Object.entries(SCHEDULE).forEach(([day, keys])=>{
+    keys.forEach((key, idx)=>{
+      const el = document.getElementById(`${day}-slot-${idx}`);
+      if (el) renderSlot(el, key, idx);
+    });
+  });
+
+  // Auto-open today's tab (or Monday if weekend)
+  const tabKeys = ['mon','tue','wed','thu','fri','sat','sun'];
+  const openKey = WORKOUT_DAYS.includes(todayKey) ? todayKey : 'mon';
+  const allTabs = document.querySelectorAll('.day-tab');
+  allTabs.forEach((t, i) => {
+    if (tabKeys[i] === openKey) showDay(openKey, t);
+  });
+
+  renderStreakBanner();
+  renderProgressSummary();
+  restoreCompletionButtons();
+}
+
+function showDay(day, tab) {
+  document.querySelectorAll('.day-content').forEach(d=>d.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('day-'+day).classList.add('active');
+  tab.classList.add('active');
+  // Re-apply today indicator (active removes it visually via cascade)
+  const dayMap = {0:'sun',1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat'};
+  const todayKey = dayMap[new Date().getDay()];
+  const allTabs = document.querySelectorAll('.day-tab');
+  const keys = ['mon','tue','wed','thu','fri','sat','sun'];
+  allTabs.forEach((t, i) => { if (keys[i] === todayKey) t.classList.add('today-tab'); });
+  // Restore completion button state for this day
+  restoreCompletionButtons();
+}
+
+init();
+</script>
+</body>
+</html>
